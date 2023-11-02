@@ -50,6 +50,7 @@ using yayu.ui;
         {
 #if UNITY_EDITOR
         Debug.LogError(message);
+        
 #endif
     }
     }
