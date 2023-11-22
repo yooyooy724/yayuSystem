@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
+using UniRx;
 using yayu.Inventory;
 
 public class InventoryUIControl_SelectAndClaim : MonoBehaviour
 {
-    [SerializeField] private InventoryUI inventoryUI;
     [SerializeField] private InventoryControl inventoryControl;
     [SerializeField] private TEXT clickInfoText;
     [SerializeField] private TEXT hoverInfoText;
@@ -16,29 +16,27 @@ public class InventoryUIControl_SelectAndClaim : MonoBehaviour
 
     private void Start()
     {
-        SetupSlotInteractions();
+        inventoryControl.ObserveEveryValueChanged(_ => _.ClickedSlots.FirstOrDefault())
+            .Subscribe(slot => UpdateInfoTextAndPanel(slot, clickInfoText, clickPanel))
+            .AddTo(this);
+
+        inventoryControl.ObserveEveryValueChanged(_ => _.HoveredSlots.FirstOrDefault())
+            .Subscribe(slot => UpdateInfoTextAndPanel(slot, hoverInfoText, hoverPanel))
+            .AddTo(this);
+
         SetupClaimButton();
     }
 
-    private void SetupSlotInteractions()
+    private void UpdateInfoTextAndPanel(ISlot slot, TEXT infoText, GameObject panel)
     {
-        foreach (var slotUI in inventoryUI.slotUIs)
+        if (slot != null && slot.Item != null)
         {
-            slotUI.onClick += () => UpdateSlotInfo(inventoryControl.ClickedSlots, clickInfoText, clickPanel);
-            slotUI.onHover += () => UpdateSlotInfo(inventoryControl.HoveredSlots, hoverInfoText, hoverPanel);
-        }
-    }
-
-    private void UpdateSlotInfo(List<ISlot> slots, TEXT infoText, GameObject panel)
-    {
-        if (slots.Count > 0)
-        {
-            ISlot slot = slots[0];
             infoText.SetText($"Name: {slot.Item.Name}\nDescription: {slot.Item.Description}");
             panel.SetActive(true);
         }
         else
         {
+            infoText.SetText("");
             panel.SetActive(false);
         }
     }
@@ -51,9 +49,10 @@ public class InventoryUIControl_SelectAndClaim : MonoBehaviour
     private void SetupClaimButton()
     {
         claimButton.AddListener_onClick(() => {
-            if (inventoryControl.ClickedSlots.Count > 0)
+            var clickedItem = inventoryControl.ClickedSlots.FirstOrDefault()?.Item;
+            if (clickedItem != null)
             {
-                onClaimAction?.Invoke(inventoryControl.ClickedSlots[0].Item);
+                onClaimAction?.Invoke(clickedItem);
             }
         });
     }
