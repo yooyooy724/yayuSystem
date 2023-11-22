@@ -12,6 +12,7 @@ namespace yayu.StateMachine
         {
             _rootStates.Add(rootState);
             rootState.path = rootState.id; // ルートステートのパスをIDで初期化
+            YDebugger.Log(rootState.path);
             InitializeStatePaths(rootState, rootState.id); // 子ステートのパスを初期化
         }
 
@@ -50,6 +51,11 @@ namespace yayu.StateMachine
 
         private IState FindState(string path)
         {
+            if (string.IsNullOrEmpty(path))
+            {
+                return null;
+            }
+
             var statePath = path.Split('_').ToList();
 
             IState result = null;

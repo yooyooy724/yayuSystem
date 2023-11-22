@@ -21,6 +21,7 @@ namespace yayu.StateMachine
         private RectTransform rect;
         private CanvasGroup canvasGroup;
         private GraphicRaycaster graphicRaycaster;
+        public override string id { get => _id; }
 
         private void Awake()
         {
@@ -43,8 +44,6 @@ namespace yayu.StateMachine
                     graphicRaycaster = gameObject.AddComponent<GraphicRaycaster>();
                 }
             }
-
-            id = _id;
         }
 
         public override void Enter()
