@@ -10,6 +10,7 @@ public class NumberFormatter
         public NumberType numberType;
         public HeadType headType;
         public FootType footType;
+        public ZeroType zeroType;
     }
 
     public enum NotationType
@@ -29,7 +30,7 @@ public class NumberFormatter
     {
         none,
         add,
-        substract,
+        subtract,
         mull,
     }
     public enum FootType
@@ -41,22 +42,35 @@ public class NumberFormatter
         perLeaf
     }
 
+    public enum ZeroType
+    {
+        number,
+        free,
+    }
+
     public static NotationType notationType = NotationType.named;
 
-    IDisposable? disposable;
     public static Params defaultParams
         = new Params()
         {
             digit = 2,
             footType = FootType.none,
             headType = HeadType.none,
-            numberType = NumberType.decimalNumber
+            numberType = NumberType.decimalNumber,
+            zeroType = ZeroType.number,
         };
 
     public static string Text(double number) => Text(number, defaultParams);
     public static string Text(double number, Params _params)
     {
         string txt = "";
+
+        if(_params.zeroType == ZeroType.free && number == 0)
+        {
+            txt += ZeroText(_params.zeroType);
+            return txt;
+        }
+
         //head
         txt += HeadText(_params.headType);
         //number
@@ -93,7 +107,7 @@ public class NumberFormatter
         {
             case HeadType.none: return "";
             case HeadType.add: return "+ ";
-            case HeadType.substract: return "- ";
+            case HeadType.subtract: return "- ";
             case HeadType.mull: return "�~ ";
             default: return "";
         }
@@ -108,6 +122,16 @@ public class NumberFormatter
             case FootType.perSec: return " / s";
             case FootType.mlPerSec: return " ml/s";
             case FootType.perLeaf: return " / leaf";
+            default: return "";
+        }
+    }
+
+    static string ZeroText(ZeroType type)
+    {
+        switch (type)
+        {
+            case ZeroType.number: return "0";
+            case ZeroType.free: return "FREE";
             default: return "";
         }
     }
@@ -137,6 +161,11 @@ public class NumberFormatter
 
 
         int order = (int)Math.Floor(Math.Log10(num) / 3);
+        if(order < 0)
+        {
+            if (isInteger) return ((int)num).ToString();
+            else return Math.Round(num, digits).ToString();
+        }
         if (order < digit.Length)
         {
             double divisor = Math.Pow(10, order * 3);

@@ -2,11 +2,21 @@ using UnityEngine;
 using yayu.ui;
 //namespace Yayu.Utility
 //{
-    public class Debuger
+    public class YDebugger
     {
         public static void Log(object message) => _Log(message);
 
-        public static void Log(string label, object message) => _Log(label + ": " + message);
+    public static void Log(params object[] messages)
+    {
+        string txt = "";
+        for (int i = 0; i < messages.Length; i++)
+        {
+            if (i > 0) txt += " / ";
+            txt += messages[i].ToString();
+
+        }
+        _Log(txt);
+    }
 
         private static void _Log(object message)
         {

@@ -18,7 +18,7 @@ namespace yayu.ui
                 descTaker = hit.collider.GetComponent<IDescriptionTaker>();
                 if (descTaker != null)
                 {
-                    Debuger.Log(hit.collider.name);
+                    YDebugger.Log(hit.collider.name);
                     presenter.SetDescription(descTaker);
                     return; // ’Ç‰Á‚ÌƒƒWƒbƒN‚ÅClearDescription‚ğŒÄ‚Î‚È‚¢‚æ‚¤‚É‚·‚é
                 }

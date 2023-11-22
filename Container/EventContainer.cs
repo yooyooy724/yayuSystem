@@ -31,7 +31,7 @@ public static class EventContainer
         if (!events.TryGetValue(key, out var value))
         {
             value = new CustomEvent<long>();
-            value.AddListener((_) => Debuger.Log($"{key} : {_}"));
+            value.AddListener((_) => YDebugger.Log($"{key} : {_}"));
             events.Add(key, value);
         }
         return value;

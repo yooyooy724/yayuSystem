@@ -37,11 +37,11 @@ namespace yayu.ui
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            Debuger.Log("OnPointerEnter");
+            YDebugger.Log("OnPointerEnter");
             descTaker = eventData.pointerCurrentRaycast.gameObject.GetComponent<IDescriptionTaker>();
             if (descTaker != null)
             {
-                Debuger.Log(eventData.pointerCurrentRaycast.gameObject.name);
+                YDebugger.Log(eventData.pointerCurrentRaycast.gameObject.name);
                 presenter.SetDescription(descTaker);
             }
         }

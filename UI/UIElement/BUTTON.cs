@@ -12,5 +12,4 @@ public abstract class BUTTON : MonoBehaviour
     public abstract void RemoveListener_onEnter(Action action);
     public abstract void RemoveListener_onExit(Action action);
     public abstract void RemoveAllListeners();
-
 }
