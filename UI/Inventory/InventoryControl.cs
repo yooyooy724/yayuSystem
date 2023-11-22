@@ -12,14 +12,16 @@ namespace yayu.Inventory
     
     public class InventoryControl
     {
-        private Inventory inventory;
+        private IInventory inventory;
         public List<ISlot> HoveredSlots { get; private set; } = new List<ISlot>();
         public List<ISlot> ClickedSlots { get; private set; } = new List<ISlot>();
 
         public bool IsSingleHoverEnabled { get; set; }
         public bool IsSingleClickEnabled { get; set; }
 
-        public InventoryControl(Inventory inventory, bool isSingleHoverEnabled, bool isSingleClickEnabled)
+        public bool IsHoverExitEnabled { get; set; }
+
+        public InventoryControl(IInventory inventory, bool isSingleHoverEnabled, bool isSingleClickEnabled)
         {
             this.inventory = inventory;
             IsSingleHoverEnabled = isSingleHoverEnabled;
@@ -28,6 +30,7 @@ namespace yayu.Inventory
             foreach (var slot in inventory.Slots)
             {
                 slot.OnEnter.AddListener(item => OnSlotEnter(slot));
+                slot.OnExit.AddListener(item => OnSlotExit(slot)); // OnExitリスナーを追加
                 slot.OnClick.AddListener(item => OnSlotClick(slot));
             }
         }
@@ -55,6 +58,18 @@ namespace yayu.Inventory
             HoveredSlots.Clear();
         }
 
+        private void OnSlotExit(ISlot slot)
+        {
+            if (IsHoverExitEnabled)
+            {
+                slot.isHovered = false;
+                if (!HoveredSlots.Contains(slot)) return;
+                HoveredSlots.Remove(slot);
+                // 追加のExitロジックをここに実装
+            }
+        }
+
+
         private void OnSlotClick(ISlot slot)
         {
             if (slot.Item != null)
@@ -63,8 +78,18 @@ namespace yayu.Inventory
                 {
                     ClearClickedSlots();
                 }
-                slot.isClicked = true;
-                ClickedSlots.Add(slot);
+
+                if (slot.isClicked)
+                {
+                    slot.isClicked = false;
+                    if (HoveredSlots.Contains(slot))
+                        HoveredSlots.Remove(slot);
+                }
+                else
+                {
+                    slot.isClicked = true;
+                    ClickedSlots.Add(slot);
+                }
                 // 追加のClickロジックをここに実装
             }
         }
@@ -107,6 +132,24 @@ namespace yayu.Inventory
                     slot.RemoveItem();
                 }
             }
+        }
+
+        public void SwapItems(ISlot targetSlot, SelectionType selectionType)
+        {
+            List<ISlot> selectedSlots = (selectionType == SelectionType.Hovered) ? HoveredSlots : ClickedSlots;
+
+            if (selectedSlots.Count > 0)
+            {
+                ISlot firstSelectedSlot = selectedSlots[0];
+                SwapItemsBetweenSlots(firstSelectedSlot, targetSlot);
+            }
+        }
+
+        private void SwapItemsBetweenSlots(ISlot slot1, ISlot slot2)
+        {
+            IItem temp = slot1.Item;
+            slot1.Item = slot2.Item;
+            slot2.Item = temp;
         }
     }
 

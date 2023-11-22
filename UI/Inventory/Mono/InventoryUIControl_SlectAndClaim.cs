@@ -2,58 +2,83 @@ using System;
 using UnityEngine;
 using UniRx;
 using yayu.Inventory;
+using System.Linq;
+using UnityEngine.Assertions.Must;
 
-public class InventoryUIControl_SelectAndClaim : MonoBehaviour
+namespace yayu.Inventory
 {
-    [SerializeField] private InventoryControl inventoryControl;
-    [SerializeField] private TEXT clickInfoText;
-    [SerializeField] private TEXT hoverInfoText;
-    [SerializeField] private GameObject clickPanel;
-    [SerializeField] private GameObject hoverPanel;
-    [SerializeField] private BUTTON claimButton;
-
-    private Action<IItem> onClaimAction;
-
-    private void Start()
+    public class InventoryUIControl_SelectAndClaim : MonoBehaviour
     {
-        inventoryControl.ObserveEveryValueChanged(_ => _.ClickedSlots.FirstOrDefault())
-            .Subscribe(slot => UpdateInfoTextAndPanel(slot, clickInfoText, clickPanel))
-            .AddTo(this);
-
-        inventoryControl.ObserveEveryValueChanged(_ => _.HoveredSlots.FirstOrDefault())
-            .Subscribe(slot => UpdateInfoTextAndPanel(slot, hoverInfoText, hoverPanel))
-            .AddTo(this);
-
-        SetupClaimButton();
-    }
-
-    private void UpdateInfoTextAndPanel(ISlot slot, TEXT infoText, GameObject panel)
-    {
-        if (slot != null && slot.Item != null)
+        [Serializable]
+        public class ItemDisplayPanelUnit
         {
-            infoText.SetText($"Name: {slot.Item.Name}\nDescription: {slot.Item.Description}");
-            panel.SetActive(true);
+            public GameObject panel;
+            public TEXT nameText;
+            public TEXT descriptionText;
         }
-        else
+
+        private InventoryControl inventoryControl;
+        [SerializeField] private InventoryUI inventoryUI;
+        [SerializeField] private ItemDisplayPanelUnit clickUnit, hoverUnit;
+        [SerializeField] private BUTTON claimButton;
+
+        private Action<IItem> onClaimAction;
+
+        public void Init(IInventory inventory)
         {
-            infoText.SetText("");
-            panel.SetActive(false);
+            inventoryControl = new InventoryControl(inventory, true, true);
+            inventoryControl.ObserveEveryValueChanged(_ => _.ClickedSlots.FirstOrDefault())
+                .Subscribe(slot => UpdateSlotInfo(slot, clickUnit.nameText, clickUnit.descriptionText, clickUnit.panel, claimButton))
+                .AddTo(this);
+
+            inventoryControl.ObserveEveryValueChanged(_ => _.HoveredSlots.FirstOrDefault())
+                .Subscribe(slot => UpdateSlotInfo(slot, hoverUnit.nameText, hoverUnit.descriptionText, hoverUnit.panel, null))
+                .AddTo(this);
+
+            SetupClaimButton();
+
+            inventoryUI.Init(inventory);
         }
-    }
 
-    public void RegisterOnClaimAction(Action<IItem> action)
-    {
-        onClaimAction = action;
-    }
-
-    private void SetupClaimButton()
-    {
-        claimButton.AddListener_onClick(() => {
-            var clickedItem = inventoryControl.ClickedSlots.FirstOrDefault()?.Item;
-            if (clickedItem != null)
+        private void UpdateSlotInfo(ISlot slot, TEXT nameText, TEXT descriptionText, GameObject panel, BUTTON button)
+        {
+            if (slot != null && slot.Item != null)
             {
-                onClaimAction?.Invoke(clickedItem);
+                nameText.BindTextDelegate(slot.Item.name);
+                descriptionText.BindTextDelegate(slot.Item.description);
+                panel.SetActive(true);
+                if (button != null)
+                {
+                    button.interactable = true;
+                }
             }
-        });
+            else
+            {
+                nameText.SetText("");
+                descriptionText.SetText("");
+                panel.SetActive(false);
+                if (button != null)
+                {
+                    button.interactable = false;
+                }
+            }
+        }
+
+        public void RegisterOnClaimAction(Action<IItem> action)
+        {
+            onClaimAction = action;
+        }
+
+        private void SetupClaimButton()
+        {
+            claimButton.AddListener_onClick(() =>
+            {
+                var clickedItem = inventoryControl.ClickedSlots.FirstOrDefault()?.Item;
+                if (clickedItem != null)
+                {
+                    onClaimAction?.Invoke(clickedItem);
+                }
+            });
+        }
     }
 }

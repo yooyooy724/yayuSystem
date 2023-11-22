@@ -24,7 +24,7 @@ internal class TMProText : TEXT
     }
     public override void SetText(string text)
     {
-        if (disposable != null) { Debug.LogWarning("cannot set txt when Observable is active"); return; }
+        if (disposable != null) disposable.Dispose(); //{ Debug.LogWarning("cannot set txt when Observable is active"); return; }
         textField.text = text;
     }
 

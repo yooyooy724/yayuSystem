@@ -15,7 +15,7 @@ namespace yayu.Inventory
         private List<SlotUI> slotUIs = new List<SlotUI>();
         private IDisposable slotSubscription;
 
-        public void Initialize(IInventory inventory)
+        public void Init(IInventory inventory)
         {
             this.inventory = inventory;
             CreateSlotUIs();
