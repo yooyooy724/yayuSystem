@@ -4,7 +4,7 @@ namespace yayu.Inventory
 {
     public interface IItem
     {
-        Guid id { get; }
+        string id { get; }
         Func<string> name { get; }
         string iconPath { get; }
         Func<string> description { get; }
@@ -13,7 +13,7 @@ namespace yayu.Inventory
 
     public class MockItem : IItem
     {
-        public Guid id { get; private set; }
+        public string id { get; private set; }
         private string _name;
         private string _description;
         public string iconPath { get; private set; }
@@ -29,7 +29,7 @@ namespace yayu.Inventory
             get { return () => _description; }
         }
 
-        public MockItem(Guid id, string name, string iconPath, string description, string createdTime)
+        public MockItem(string id, string name, string iconPath, string description, string createdTime)
         {
             this.id = id;
             this._name = name;

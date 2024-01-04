@@ -52,4 +52,11 @@ internal class TMProText : TEXT
         textDelegate = null;
         if (disposable != null) disposable.Dispose();
     }
+
+    public override void OnReset()
+    {
+        textDelegate = null;
+        if (disposable != null) disposable.Dispose();
+        textField.text = "";
+    }
 }

@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace yayu.StateMachine
 {
@@ -7,7 +8,7 @@ namespace yayu.StateMachine
         // •K—v‚É‰ž‚¶‚Ä•ÒW‚·‚é
         Main, Sub
     }
-    public static class STATE_MACHINE
+    public class STATE_MACHINE : MonoBehaviour
     {
         static StateMachine[] Instances { get; } = new StateMachine[Enum.GetValues(typeof(StateMachineKind)).Length];
         public static StateMachine Main => Instances[(int)StateMachineKind.Main];
@@ -18,6 +19,13 @@ namespace yayu.StateMachine
                 Instances[(int)kind] = new StateMachine();
             }
             return Instances[(int)kind];
+        }
+        private void OnDestroy()
+        {
+            foreach (var instance in Instances)
+            {
+                instance?.Dispose();
+            }
         }
     }
 }

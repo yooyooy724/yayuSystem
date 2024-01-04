@@ -109,7 +109,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6181006228272098323
 RectTransform:
   m_ObjectHideFlags: 0
@@ -319,7 +319,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonComponent: {fileID: 7605478257569448068}
   iconComponent: {fileID: 4675060033925907083}
-  objectsToEnableOnHovered: []
+  objectsToEnableOnHovered:
+  - {fileID: 8810993872833787304}
   objectsToDisableOnHovered: []
   objectsToEnableOnClicked:
   - {fileID: 116677004222925430}

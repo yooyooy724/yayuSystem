@@ -10,7 +10,7 @@ public enum PanelState
 
 public abstract class PANEL : MonoBehaviour
 {
-    public abstract bool isShow { get; set; }
+    public abstract bool isShow { get; }
     public abstract void Show();
     public abstract void Hide();
 }

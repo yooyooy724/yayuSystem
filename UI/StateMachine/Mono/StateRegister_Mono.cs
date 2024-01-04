@@ -4,13 +4,17 @@ namespace yayu.StateMachine
 {
     public class StateRegister_Mono : MonoBehaviour
     {
+        [SerializeField] bool asInitialState = false;
         [SerializeField] StateMachineKind targetStateMachine;
         private void Awake()
         {
-            var state = GetComponent<MONO_STATE>();
+            var state = GetComponent<State_Mono>();
             if (state != null)
             {
-                STATE_MACHINE.GetStateMachine(targetStateMachine).RegisterRootState(state);
+                if (asInitialState)
+                    STATE_MACHINE.GetStateMachine(targetStateMachine).RegisterRootStateAsInitial(state);
+                else
+                    STATE_MACHINE.GetStateMachine(targetStateMachine).RegisterRootState(state);
             }
         }
     }

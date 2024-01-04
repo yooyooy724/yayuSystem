@@ -26,12 +26,17 @@ namespace yayu.Inventory
 
         public void Init(IInventory inventory)
         {
-            inventoryControl = new InventoryControl(inventory, true, true);
+            inventoryControl = new InventoryControl(new IInventory[] { inventory }, true, true, true);
             inventoryControl.ObserveEveryValueChanged(_ => _.ClickedSlots.FirstOrDefault())
-                .Subscribe(slot => UpdateSlotInfo(slot, clickUnit.nameText, clickUnit.descriptionText, clickUnit.panel, claimButton))
+                .Subscribe(slot =>
+                {
+                    hoverUnit.panel.SetActive(false);
+                    UpdateSlotInfo(slot, clickUnit.nameText, clickUnit.descriptionText, clickUnit.panel, claimButton);
+                })
                 .AddTo(this);
 
             inventoryControl.ObserveEveryValueChanged(_ => _.HoveredSlots.FirstOrDefault())
+                .Where(_ => _ != inventoryControl.ClickedSlots.FirstOrDefault())
                 .Subscribe(slot => UpdateSlotInfo(slot, hoverUnit.nameText, hoverUnit.descriptionText, hoverUnit.panel, null))
                 .AddTo(this);
 

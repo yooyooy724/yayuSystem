@@ -5,7 +5,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GaugePresenter : MonoBehaviour
+public class GaugePresenter : MonoBehaviour, IDisposable
 {
     public enum TextKind
     {
@@ -51,7 +51,7 @@ public class GaugePresenter : MonoBehaviour
         disposable = this.ObserveEveryValueChanged(_ => _.valueDelegate())
             .Subscribe((_) =>
             {
-                rateText.text = $"{NumberFormatter.Text(current(), NumberFormatter.defaultParams)} / {NumberFormatter.Text(goal(), NumberFormatter.defaultParams)} ({NumberFormatter.Text(_, numParams)})";
+                rateText.text = $"{NumberFormatter.Text(current(), NumberFormatter.defaultParams)} / {NumberFormatter.Text(goal(), NumberFormatter.defaultParams)} ({NumberFormatter.Text(_ * 100f, numParams)})";
                 fillImage.fillAmount = _;
             });
     }
@@ -59,6 +59,13 @@ public class GaugePresenter : MonoBehaviour
     public void Dispose()
     {
         if (disposable != null) disposable.Dispose();
+    }
+
+    public void OnReset()
+    {
+        if (disposable != null) disposable.Dispose();
+        fillImage.fillAmount = 0;
+        rateText.SetText("");
     }
 
     private void OnDestroy()

@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using Doozy.Runtime.UIManager.Containers;
 using UniRx;
 using UnityEngine;
 
@@ -9,7 +8,6 @@ namespace yayu.ui
     {
         [SerializeField] TEXT popUpText;
         [SerializeField] CanvasGroup canvasGroup;
-        [SerializeField] UIContainer canvas;
         [SerializeField] bool isDebug = false;
 
         // Ensure this is a singleton.
@@ -25,7 +23,6 @@ namespace yayu.ui
             {
                 Destroy(gameObject);
             }
-            canvasGroup.alpha = 0; 
         }
 
         private void Start()
@@ -46,7 +43,6 @@ namespace yayu.ui
         {
             popUpText.SetText(message);
             canvasGroup.alpha = 1; // Make sure text is fully opaque
-            canvas.Show();
 
             float elapsed = 0.0f;
             while (elapsed < displayTime)
@@ -57,7 +53,6 @@ namespace yayu.ui
 
                 await UniTask.Yield(); // Await until next frame
             }
-            canvas.Hide();
         }
     }
 }

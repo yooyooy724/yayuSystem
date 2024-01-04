@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 public static class NumericTextExtensions
 {
-    public static void BindNumberDelegate(this TEXT textObj, Func<double> number, ICollection<IDisposable> container) 
-        => BindNumberDelegate(textObj, number, defaultParams, container);
-    public static void BindNumberDelegate(this TEXT textObj, Func<double> number, Params _params, ICollection<IDisposable> container)
+    public static IDisposable BindNumberDelegate(this TEXT textObj, Func<double> number) 
+        => BindNumberDelegate(textObj, number, defaultParams);
+    public static IDisposable BindNumberDelegate(this TEXT textObj, Func<double> number, Params _params)
     {
-        textObj.ObserveEveryValueChanged(_ => number()).Subscribe(_ => ApplyNumber(textObj, _, _params)).AddTo(container);
+        return textObj.ObserveEveryValueChanged(_ => number()).Subscribe(_ => ApplyNumber(textObj, _, _params));
     }
-    public static void BindNumberDelegate(this TEXT textObj, Func<double> number)
-    => BindNumberDelegate(textObj, number, defaultParams);
-    public static void BindNumberDelegate(this TEXT textObj, Func<double> number, Params _params)
+    public static void BindNumberDelegate_SelfDispose(this TEXT textObj, Func<double> number)
+        => BindNumberDelegate_SelfDispose(textObj, number, defaultParams);
+    public static void BindNumberDelegate_SelfDispose(this TEXT textObj, Func<double> number, Params _params)
     {
         textObj.ObserveEveryValueChanged(_ => number()).Subscribe(_ => ApplyNumber(textObj, _, _params)).AddTo(textObj.gameObject);
     }

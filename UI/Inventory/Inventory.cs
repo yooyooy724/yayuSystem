@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Graphs;
 
 namespace yayu.Inventory
 {
@@ -10,24 +9,36 @@ namespace yayu.Inventory
         int Capacity { get; }
         bool AddItem(IItem item, bool pushOutIfFull = false);
         bool RemoveItem(IItem item);
-        IItem FindItem(Guid id);
-        IEnumerable<ISlot> Slots { get; }
+        IItem FindItem(string id);
+        IReadOnlyCollection<ISlot> Slots { get; }
         // 他に必要なメソッドやプロパティがあればここに追加
     }
 
-    public class Inventory : IInventory
+    public class Inventory<TSlot> : IInventory where TSlot : ISlot, new()
     {
-        private List<Slot> slots;
-        public IEnumerable<ISlot> Slots => slots;
+        private List<ISlot> slots;
+        public IReadOnlyCollection<ISlot> Slots => slots;
         public int Capacity { get; private set; }
 
         public Inventory(int capacity)
         {
             Capacity = capacity;
-            slots = new List<Slot>(capacity);
+            slots = new List<ISlot>(capacity);
             for (int i = 0; i < capacity; i++)
             {
-                slots.Add(new Slot());
+                slots.Add(new TSlot());
+            }
+        }
+
+        public Inventory(int capacity, IItem[] items)
+        {
+            Capacity = capacity;
+            slots = new List<ISlot>(capacity);
+            for (int i = 0; i < capacity; i++)
+            {
+                slots.Add(new TSlot());
+                if(i < items.Length)
+                    slots[i].AddItem(items[i]);
             }
         }
 
@@ -60,7 +71,7 @@ namespace yayu.Inventory
             return false;
         }
 
-        public IItem FindItem(Guid id)
+        public IItem FindItem(string id)
         {
             return slots.Select(s => s.Item).FirstOrDefault(item => item != null && item.id == id);
         }

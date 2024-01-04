@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ToggleControolByButton : MonoBehaviour
+public class ToggleControlByButton : MonoBehaviour
 {
     [SerializeField] TOGGLE toggle;
     [SerializeField] List<BUTTON> buttons;

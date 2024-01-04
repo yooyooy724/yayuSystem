@@ -11,6 +11,7 @@ namespace yayu.Inventory
     {
         [SerializeField] private GameObject slotUIPrefab;
         [SerializeField] private Transform parent;
+        [SerializeField] private ReCulcurateLayout reCulcurateLayout;
         private IInventory inventory;
         private List<SlotUI> slotUIs = new List<SlotUI>();
         private IDisposable slotSubscription;
@@ -43,6 +44,7 @@ namespace yayu.Inventory
         {
             ClearSlotUIs();
             CreateSlotUIs();
+            reCulcurateLayout.ResizeLayoutAfterFixedFrame(1);
         }
 
         private void ClearSlotUIs()

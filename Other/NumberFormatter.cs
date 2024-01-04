@@ -31,7 +31,7 @@ public class NumberFormatter
         none,
         add,
         subtract,
-        mull,
+        mul,
     }
     public enum FootType
     {
@@ -108,7 +108,7 @@ public class NumberFormatter
             case HeadType.none: return "";
             case HeadType.add: return "+ ";
             case HeadType.subtract: return "- ";
-            case HeadType.mull: return "�~ ";
+            case HeadType.mul: return "× ";
             default: return "";
         }
     }

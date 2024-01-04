@@ -1,6 +1,4 @@
-using Codice.CM.Common.Encryption;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
 
 namespace yayu.Inventory
 {
@@ -12,26 +10,42 @@ namespace yayu.Inventory
     
     public class InventoryControl
     {
-        private IInventory inventory;
         public List<ISlot> HoveredSlots { get; private set; } = new List<ISlot>();
         public List<ISlot> ClickedSlots { get; private set; } = new List<ISlot>();
 
         public bool IsSingleHoverEnabled { get; set; }
         public bool IsSingleClickEnabled { get; set; }
-
         public bool IsHoverExitEnabled { get; set; }
 
-        public InventoryControl(IInventory inventory, bool isSingleHoverEnabled, bool isSingleClickEnabled)
+        public InventoryControl(IInventory inventory, bool isSingleHoverEnabled, bool isSingleClickEnabled, bool isHoverExitEnabled)
         {
-            this.inventory = inventory;
             IsSingleHoverEnabled = isSingleHoverEnabled;
             IsSingleClickEnabled = isSingleClickEnabled;
+            IsHoverExitEnabled = isHoverExitEnabled;
 
             foreach (var slot in inventory.Slots)
             {
                 slot.OnEnter.AddListener(item => OnSlotEnter(slot));
                 slot.OnExit.AddListener(item => OnSlotExit(slot)); // OnExitリスナーを追加
                 slot.OnClick.AddListener(item => OnSlotClick(slot));
+            }
+
+        }
+
+        public InventoryControl(IInventory[] inventories, bool isSingleHoverEnabled, bool isSingleClickEnabled, bool isHoverExitEnabled)
+        {
+            IsSingleHoverEnabled = isSingleHoverEnabled;
+            IsSingleClickEnabled = isSingleClickEnabled;
+            IsHoverExitEnabled = isHoverExitEnabled;
+
+            foreach (var inventory in inventories)
+            {
+                foreach (var slot in inventory.Slots)
+                {
+                    slot.OnEnter.AddListener(item => OnSlotEnter(slot));
+                    slot.OnExit.AddListener(item => OnSlotExit(slot)); // OnExitリスナーを追加
+                    slot.OnClick.AddListener(item => OnSlotClick(slot));
+                }
             }
         }
 
@@ -112,7 +126,7 @@ namespace yayu.Inventory
             ClearClickedSlots();
         }
 
-        public void MoveItems(Inventory targetInventory, SelectionType selectionType)
+        public void MoveItems(IInventory targetInventory, SelectionType selectionType)
         {
             List<ISlot> selectedSlots = (selectionType == SelectionType.Hovered) ? HoveredSlots : ClickedSlots;
             RemoveItems(selectedSlots);

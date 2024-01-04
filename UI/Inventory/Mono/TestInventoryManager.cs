@@ -10,12 +10,12 @@ namespace yayu.Inventory
         [SerializeField] private int inventoryCapacity = 10; // インベントリの容量
         [SerializeField] private BUTTON addItemButton;
 
-        Inventory inventory;
+        Inventory<Slot> inventory;
 
         void Start()
         {
             // Inventory インスタンスの作成
-            inventory = new Inventory(inventoryCapacity);
+            inventory = new Inventory<Slot>(inventoryCapacity);
 
             // InventoryUIControl_SelectAndClaim コンポーネントの初期化
             inventoryUIControl.Init(inventory);
@@ -28,10 +28,11 @@ namespace yayu.Inventory
 
         private void AddTestItemsToInventory()
         {
+            YDebugger.Log("AddTestItemsToInventory");
             MockItem item = new MockItem(
-                    Guid.NewGuid(),
-                    $"Item {i + 1}",
-                    "leaf",
+                    Guid.NewGuid().ToString(),
+                    $"ATARASHII ITEM {i + 1}",
+                    "Leaf",
                     $"Description for item {i + 1}",
                     DateTime.Now.ToString());
 

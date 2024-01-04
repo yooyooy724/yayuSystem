@@ -45,6 +45,12 @@ namespace yayu.Inventory
             buttonComponent.AddListener_onClick(() => slot.OnClick.Invoke(slot.Item));
             buttonComponent.AddListener_onEnter(() => slot.OnEnter.Invoke(slot.Item));
             buttonComponent.AddListener_onExit(() => slot.OnExit.Invoke(slot.Item));
+
+            // ボタンのイベントリスナーを設定
+            buttonComponent.AddListener_onClick(() => YDebugger.Log("OnClick"));
+            buttonComponent.AddListener_onEnter(() => YDebugger.Log("OnEnter"));
+            buttonComponent.AddListener_onExit(() => YDebugger.Log("OnExit"));
+
         }
 
         private void UpdateIcon(IItem item)
@@ -80,12 +86,12 @@ namespace yayu.Inventory
 
         private void UpdateGameObjectsOnClicked(bool isState)
         {
-            foreach (var obj in objectsToEnableOnHovered)
+            foreach (var obj in objectsToEnableOnClicked)
             {
                 if (obj != null) obj.SetActive(isState);
             }
 
-            foreach (var obj in objectsToDisableOnHovered)
+            foreach (var obj in objectsToDisableOnClicked)
             {
                 if (obj != null) obj.SetActive(!isState);
             }
