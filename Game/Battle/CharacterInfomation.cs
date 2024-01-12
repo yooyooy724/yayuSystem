@@ -26,7 +26,7 @@ namespace yayu.Battle
         public static CharacterInformation InstantCreate(double maxHp, string name)
         {
             CharacterIdentifier id = CharacterIdentifier.CreateWithGuid(name);
-            CharacterState state = new CharacterState(maxHp);
+            CharacterState state = new CharacterState(maxHp, CharacterBehaviorState.Dying);
             return new CharacterInformation(id, state, () => maxHp);
         }
     }

@@ -9,6 +9,9 @@ namespace yayu.Battle
         CharacterInformation info { get; }
         CharacterEvents events { get; }
         CharacterControl ctr { get; }
+        void UpdateBySec(double deltaTime);
+        void SetEnemies(ICharacter[] enemies);
+        void ChangeBehaviorState(CharacterBehaviorState state);
     }
 
     public class Character : ICharacter
@@ -20,14 +23,16 @@ namespace yayu.Battle
         public Character(CharacterInformation information,
                          IAttackBehavior attackBehavior,
                          IAttackedDamage attackedDamage,
-                         IRegenerateBehavior regenerateBehavior)
+                         IRegenerateBehavior regenerateBehavior,
+                         CharacterBehaviorState behaviorStateAfterDead)
         {
             info = information;
             events = new CharacterEvents();
             ctr = new CharacterControl(
                 info, info.state, events, 
                 attackBehavior, attackedDamage,
-                regenerateBehavior);
+                regenerateBehavior,
+                behaviorStateAfterDead);
         }
 
         public void UpdateBySec(double deltaTime)

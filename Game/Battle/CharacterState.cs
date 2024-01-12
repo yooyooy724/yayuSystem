@@ -7,13 +7,32 @@ namespace yayu.Battle
     /// </summary>
     public class CharacterState
     {
-        public CharacterBehaviorState BehaviorState { get; set; }
-        public double Hp { get; set; }
+        CharacterBehaviorState _BehaviorState;
+        public CharacterBehaviorState BehaviorState 
+        { 
+            get => _BehaviorState;
+            set
+            {
+                _BehaviorState = value;
+                YDebugger.Log("::::::::::::::::::::::BehaviorState Update", _BehaviorState);
+            }
+        }
 
-        public CharacterState(double initialHp)
+        public double _Hp;
+        public double Hp 
+        { 
+            get => _Hp;
+            set
+            {
+                _Hp = value;
+                //YDebugger.Log("Hp Update", _Hp);
+            }
+        }
+
+        public CharacterState(double initialHp, CharacterBehaviorState initialBehaviorState)
         {
             Hp = initialHp;
-            BehaviorState = CharacterBehaviorState.Resting; // Set initial state to resting
+            BehaviorState = initialBehaviorState;
         }
     }
 
@@ -22,14 +41,18 @@ namespace yayu.Battle
         readonly CharacterState state;
         readonly CharacterEvents events;
         readonly Func<double> MaxHp;
+        readonly CharacterBehaviorState stateAfterDead;
+
         public CharacterStateControl(
             CharacterState state, 
             CharacterEvents events,
-            Func<double> MaxHp)
+            Func<double> MaxHp,
+            CharacterBehaviorState stateAfterDead)
         {
             this.state = state;
             this.events = events;
             this.MaxHp = MaxHp;
+            this.stateAfterDead = stateAfterDead;
         }
 
         public void Damage(double damage)
@@ -37,7 +60,7 @@ namespace yayu.Battle
             state.Hp -= damage;
             state.Hp = Math.Max(state.Hp, 0);
             events.OnDamagedTrigger.Invoke(damage);
-            UpdateOnHpChange();
+            OnDamage();
         }
 
         public void Regenerate(double amount)
@@ -45,35 +68,17 @@ namespace yayu.Battle
             state.Hp += amount;
             state.Hp = Math.Min(state.Hp, MaxHp());
             events.OnRegenerateTrigger.Invoke(amount);
-            UpdateOnHpChange();
         }
 
-        public void UpdateBySec(double deltaTime)
-        {
-            if (state.Hp <= 0)
-            {
-                if (state.BehaviorState.Compare(CharacterBehaviorState.Dying))
-                {
-                    state.BehaviorState = CharacterBehaviorState.Dying;
-                    events.OnDeadTrigger.Invoke();
-                }
-            }
-        }
-
-        void UpdateOnHpChange()
+        void OnDamage()
         {
             if (
                 state.Hp <= 0 &&
-                !state.BehaviorState.Compare(CharacterBehaviorState.Dying))
+                !state.BehaviorState.Compare(stateAfterDead))
             {
-                state.BehaviorState = CharacterBehaviorState.Dying;
+                state.BehaviorState = stateAfterDead;
+                YDebugger.Log("CharacterStateControl", "OnDeadTrigger");
                 events.OnDeadTrigger.Invoke();
-            }
-            else if (
-                state.BehaviorState.Compare(CharacterBehaviorState.Dying) &&
-                state.Hp > 0)
-            {
-                state.BehaviorState = CharacterBehaviorState.Resting;
             }
         }
     }
@@ -83,28 +88,28 @@ namespace yayu.Battle
     /// </summary>
     public struct CharacterBehaviorState
     {
-        private CharacterBehaviorState(bool canRest, bool canRegenerate, bool canAttack)
+        private CharacterBehaviorState(bool canRegenerate, bool canAttack)
         {
-            CanRest = canRest;
+            //CanRest = canRest;
             CanRegenerate = canRegenerate;
             CanAttack = canAttack;
         }
 
-        public bool CanRest { get; }
+        //public bool CanRest { get; }
         public bool CanRegenerate { get; }
         public bool CanAttack { get; }
 
         // à»â∫Ç…BehaviorStateÇíËã`Ç∑ÇÈÅB
-        public static readonly CharacterBehaviorState Battling = new CharacterBehaviorState(false, true, true);
-        public static readonly CharacterBehaviorState Resting = new CharacterBehaviorState(true, false, false);
-        public static readonly CharacterBehaviorState Dying = new CharacterBehaviorState(false, false, false);
+        public static readonly CharacterBehaviorState Battling = new CharacterBehaviorState(true, true);
+        public static readonly CharacterBehaviorState Resting = new CharacterBehaviorState(true, false);
+        public static readonly CharacterBehaviorState Dying = new CharacterBehaviorState(false, false);
     }
 
     public static class CharacterBehaviorStateExtension
     {
         public static bool Compare(this CharacterBehaviorState a, CharacterBehaviorState b)
         {
-            return a.CanRest == b.CanRest && a.CanRegenerate == b.CanRegenerate && a.CanAttack == b.CanAttack;
+            return a.CanRegenerate == b.CanRegenerate && a.CanAttack == b.CanAttack;
         }
     }
 }

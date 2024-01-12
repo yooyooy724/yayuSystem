@@ -17,36 +17,42 @@ namespace yayu.Battle
 
         public double Attack(CharacterInformation attacker, IAttackTarget[] targets)
         {
+            YDebugger.Log("Attackable Behaviors Count", attackableBehaviors.Count());
             return attackableBehaviors.Sum(behavior => behavior.Attack(attacker, targets));
         }
 
         public bool UpdateCanAttack()
         {
             attackableBehaviors = behaviors.Where(behavior => behavior.UpdateCanAttack());
+            if (attackableBehaviors.Count() > 0) YDebugger.Log("Attackable Behaviors Count !?!?!?!?!?!?", attackableBehaviors.Count());
             return attackableBehaviors.Any();
         }
     }
 
     // Constant Attack Power
-    public class AttackBehavior : IAttackBehavior
+    public class MultiAttackBehavior : IAttackBehavior
     {
         private readonly Func<double> attackPower;
         private readonly Func<int> maxTargetCount;
+        private readonly Func<double> nextTargetDmgFactor;
 
-        public AttackBehavior(Func<double> attackPower, Func<int> maxTargetCount)
+        public MultiAttackBehavior(Func<double> attackPower, Func<int> maxTargetCount, Func<double> nextTargetDmgFactor)
         {
             this.attackPower = attackPower;
             this.maxTargetCount = maxTargetCount;
+            this.nextTargetDmgFactor = nextTargetDmgFactor;
         }
 
         public double Attack(CharacterInformation attacker, IAttackTarget[] targets)
         {
             int enemyCount = Math.Min(maxTargetCount(), targets.Length);
+            double atkPower = attackPower();    
             for (int i = 0; i < enemyCount; i++)
             {
-                targets[i].OnAttacked(attackPower());
+                targets[i].OnAttacked(atkPower * Math.Pow(nextTargetDmgFactor(), i));
             }
-            return attackPower() * enemyCount;
+            YDebugger.Log("Multi Attack Behaviors", enemyCount, atkPower);
+            return atkPower * enemyCount;
         }
 
         public bool UpdateCanAttack()
@@ -60,40 +66,37 @@ namespace yayu.Battle
     public class IntervalAttackBehavior : IAttackBehavior
     {
         private readonly IAttackBehavior decoratedBehavior;
-        private readonly Func<double> interval;
-
-        double sec;
+        int attackCount;
 
         public IntervalAttackBehavior(
-            Func<double> interval,
+            LoopTimer loopTimer,
             IAttackBehavior decoratedBehavior)
         {
             this.decoratedBehavior = decoratedBehavior;
-            this.interval = interval;
-            sec = 0;
-        }
-
-        public void UpdateBySec(double sec)
-        {
-            this.sec += sec;
+            loopTimer.OnFilled.AddListener(_ => attackCount ++);
         }
 
         public double Attack(CharacterInformation attacker, IAttackTarget[] targets)
         {
-            long count = (long)(sec / interval());
-            sec -= count * interval();
-
             double totalAttack = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < attackCount; i++)
             {
                 totalAttack += decoratedBehavior.Attack(attacker, targets);
             }
+            YDebugger.Log("Interval Attack Behaviors", totalAttack);
+            attackCount = 0;
             return totalAttack;
         }
 
         public bool UpdateCanAttack()
         {
-            return sec >= interval();
+            if (attackCount > 0)
+            {
+                YDebugger.Log("Interval Attack !!!!!", attackCount);
+                return true;
+            }
+            attackCount = 0;
+            return false;
         }
     }
 

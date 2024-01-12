@@ -40,7 +40,7 @@ namespace yayu.Battle
         IRegenerateBehavior regenerateBehavior { get; }
         CharacterStateControl characterStateControl { get; }
 
-        ICharacter[] enemies;
+        public ICharacter[] enemies;
 
         public CharacterControl(
                 CharacterInformation info,
@@ -48,7 +48,8 @@ namespace yayu.Battle
                     CharacterEvents events,
                     IAttackBehavior attackBehaviors,
                     IAttackedDamage attackedDamage,
-                    IRegenerateBehavior regenerateBehavior)
+                    IRegenerateBehavior regenerateBehavior,
+                    CharacterBehaviorState behaviorStateAfterDead)
         {
             this.info = info;
             this.state = state;
@@ -56,7 +57,7 @@ namespace yayu.Battle
             this.attackBehavior = attackBehaviors;
             this.attackedDamage = attackedDamage;
             this.regenerateBehavior = regenerateBehavior;
-            characterStateControl = new CharacterStateControl(state, events, info.MaxHp);
+            characterStateControl = new CharacterStateControl(state, events, info.MaxHp, behaviorStateAfterDead);
 
             if(this.attackedDamage == null) this.attackedDamage = new DirectDamageBehavior();
         }
@@ -74,13 +75,16 @@ namespace yayu.Battle
 
         private void AttackProcess()
         {
-            if(attackBehavior == null) return;
+            //YDebugger.Log("attackBehavior == null", attackBehavior == null);
+            //YDebugger.Log("state.BehaviorState.CanAttack", state.BehaviorState.CanAttack);
+            if (attackBehavior == null) return;
             if (!state.BehaviorState.CanAttack) return;
             var targets = enemies.Select(enemy => enemy.ctr as IAttackTarget).ToArray();
             if (attackBehavior.UpdateCanAttack())
             {
                 double attackPower = attackBehavior.Attack(info, targets);
                 events.OnAttackTrigger.Invoke(attackPower);
+                YDebugger.Log("attackPower", attackPower);
             }
         }
 

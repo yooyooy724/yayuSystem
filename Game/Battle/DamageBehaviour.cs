@@ -11,6 +11,21 @@ namespace yayu.Battle
         }
     }
 
+    public class MinimalDamageBehavior : IAttackedDamage
+    {
+        readonly Func<double> minimalDamage;
+
+        public MinimalDamageBehavior(Func<double> minimalDamage)
+        {
+            this.minimalDamage = minimalDamage;
+        }
+
+        public double AttackedDamage(double attack, object attackFeature = null)
+        {
+            return Math.Max(minimalDamage(), attack);
+        }
+    }
+
     public class EvasionDamageBehavior : IAttackedDamage
     {
         readonly IAttackedDamage attackedDamage;

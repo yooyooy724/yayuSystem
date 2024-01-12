@@ -67,40 +67,40 @@ namespace yayu.Battle
         }
     }
 
-    // Interval Regenerate Behavior
-    public class IntervalRegenerateBehavior : IRegenerateBehavior
-    {
-        private readonly IRegenerateBehavior decoratedBehavior;
-        private readonly double interval;
-        private double sec;
+    //// Interval Regenerate Behavior
+    //public class IntervalRegenerateBehavior : IRegenerateBehavior
+    //{
+    //    private readonly IRegenerateBehavior decoratedBehavior;
+    //    private readonly double interval;
+    //    private double sec;
 
-        public IntervalRegenerateBehavior(IRegenerateBehavior decoratedBehavior, double interval)
-        {
-            this.decoratedBehavior = decoratedBehavior;
-            this.interval = interval;
-            sec = 0;
-        }
+    //    public IntervalRegenerateBehavior(IRegenerateBehavior decoratedBehavior, double interval)
+    //    {
+    //        this.decoratedBehavior = decoratedBehavior;
+    //        this.interval = interval;
+    //        sec = 0;
+    //    }
 
-        public void UpdateBySec(double sec)
-        {
-            this.sec += sec;
-        }
+    //    public void UpdateBySec(double sec)
+    //    {
+    //        this.sec += sec;
+    //    }
 
-        public double Regenerate()
-        {
-            if (sec >= interval)
-            {
-                sec -= interval;
-                return decoratedBehavior.Regenerate();
-            }
-            return 0;
-        }
+    //    public double Regenerate()
+    //    {
+    //        if (sec >= interval)
+    //        {
+    //            sec -= interval;
+    //            return decoratedBehavior.Regenerate();
+    //        }
+    //        return 0;
+    //    }
 
-        public bool UpdateCanRegenerate()
-        {
-            return sec >= interval;
-        }
-    }
+    //    public bool UpdateCanRegenerate()
+    //    {
+    //        return sec >= interval;
+    //    }
+    //}
 
     // Conditional Regenerate Behavior
     public class ConditionalRegenerateBehavior : IRegenerateBehavior
