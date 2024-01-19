@@ -5,7 +5,7 @@ using System.Linq;
 using Unity.Collections;
 using UnityEngine;
 
-namespace yayu.DTO
+namespace yayu.DOTS
 {
     public interface IChangeablePositionGetter
     {

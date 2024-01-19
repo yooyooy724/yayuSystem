@@ -4,7 +4,7 @@ using UnityEngine;
 using Unity.Burst;
 using System;
 
-namespace yayu.DTO
+namespace yayu.DOTS
 {
     [BurstCompile]
     public struct AgeUpdateJob : IJobParallelFor
@@ -40,7 +40,7 @@ namespace yayu.DTO
 
         public void Execute(int index)
         {
-            float goldenAngle = Mathf.PI * (3 - Mathf.Sqrt(5)); // ‰©‹àŠp
+            float goldenAngle = Mathf.PI * (3 - Mathf.Sqrt(5)); // é»„é‡‘è§’
             float longitude = goldenAngle * index;
             longitude /= 2 * Mathf.PI; longitude -= Mathf.Floor(longitude); longitude *= 2 * Mathf.PI;
             if (longitude > Mathf.PI) longitude -= 2 * Mathf.PI;
@@ -113,6 +113,12 @@ namespace yayu.DTO
             var jobHandle = job.Schedule(particlesData.GetTransformAsArray().Length, 64);
             jobHandle.Complete();
 
+        }
+
+        public void UpdateFirstParticleRate(float rate)
+        {
+            Color col = new Color(1, 1, 0, rate);
+            particlesData.TrySetColor(particlesData.GetColorAsArray().Length - 1, col);
         }
     }
 

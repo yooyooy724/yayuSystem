@@ -4,7 +4,7 @@ using System.Linq;
 using Unity.Collections;
 using UnityEngine;
 
-namespace yayu.DTO
+namespace yayu.DOTS
 {
     public interface IParticleData
     {
@@ -43,7 +43,7 @@ namespace yayu.DTO
         NativeList<float> LifeTimes;
         NativeList<Color> Colors;
 
-        private int maxSize; // Å‘å—v‘f”
+        private int maxSize; // æœ€å¤§è¦ç´ æ•°
         public int MaxCount => maxSize;
 
         public NativeArray<Matrix4x4> GetTransformAsArray() => Transforms.AsArray();
@@ -73,6 +73,28 @@ namespace yayu.DTO
                 return false; // Index out of range
             }
             color = Colors[index];
+            return true;
+        }
+
+        public bool TrySetColor(int index, Color color)
+        {
+            if (index < 0 || index >= Colors.Length || Colors.Length <= 0)
+            {
+                return false; // Index out of range
+            }
+            Colors[index] = color;
+            return true;
+        }
+
+        public bool TrySetAlpha(int index, float alpha)
+        {
+            if (index < 0 || index >= Colors.Length || Colors.Length <= 0)
+            {
+                return false; // Index out of range
+            }
+            Color col = Colors[index];
+            col.a = alpha;
+            Colors[index] = col;
             return true;
         }
 

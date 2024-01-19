@@ -1,7 +1,7 @@
 using UnityEngine;
 using UniRx;
 
-namespace yayu.DTO
+namespace yayu.DOTS
 {
     public interface ICircleDataAccessor
     {
