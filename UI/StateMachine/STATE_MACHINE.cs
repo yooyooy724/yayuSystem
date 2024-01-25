@@ -5,8 +5,8 @@ namespace yayu.StateMachine
 {
     public enum StateMachineKind
     {
-        // •K—v‚É‰‚¶‚Ä•ÒW‚·‚é
-        Main, Sub
+        // å¿…è¦ã«å¿œã˜ã¦ç·¨é›†ã™ã‚‹
+        Main, Upgrade
     }
     public class STATE_MACHINE : MonoBehaviour
     {
