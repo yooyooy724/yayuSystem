@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
-namespace yayu.StateMachine
+namespace yayu.UI.StateMachine
 {
     public class StateAndPanelSyncControl : MonoBehaviour
     {

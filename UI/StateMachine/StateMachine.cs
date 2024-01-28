@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using yayu.Event;
 
-namespace yayu.StateMachine
+namespace yayu.UI.StateMachine
 {
     public class StateMachine : IDisposable
     {

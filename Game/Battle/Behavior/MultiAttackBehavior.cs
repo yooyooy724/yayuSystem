@@ -17,14 +17,14 @@ namespace yayu.Battle
 
         public double Attack(CharacterInformation attacker, IAttackTarget[] targets)
         {
-            YDebugger.Log("Attackable Behaviors Count", attackableBehaviors.Count());
+            //YDebugger.Log("Attackable Behaviors Count", attackableBehaviors.Count());
             return attackableBehaviors.Sum(behavior => behavior.Attack(attacker, targets));
         }
 
         public bool UpdateCanAttack()
         {
             attackableBehaviors = behaviors.Where(behavior => behavior.UpdateCanAttack());
-            if (attackableBehaviors.Count() > 0) YDebugger.Log("Attackable Behaviors Count !?!?!?!?!?!?", attackableBehaviors.Count());
+            //if (attackableBehaviors.Count() > 0) YDebugger.Log("Attackable Behaviors Count !?!?!?!?!?!?", attackableBehaviors.Count());
             return attackableBehaviors.Any();
         }
     }
@@ -51,7 +51,7 @@ namespace yayu.Battle
             {
                 targets[i].OnAttacked(atkPower * Math.Pow(nextTargetDmgFactor(), i));
             }
-            YDebugger.Log("Multi Attack Behaviors", enemyCount, atkPower);
+            //YDebugger.Log("Multi Attack Behaviors", enemyCount, atkPower);
             return atkPower * enemyCount;
         }
 
@@ -83,7 +83,7 @@ namespace yayu.Battle
             {
                 totalAttack += decoratedBehavior.Attack(attacker, targets);
             }
-            YDebugger.Log("Interval Attack Behaviors", totalAttack);
+            //YDebugger.Log("Interval Attack Behaviors", totalAttack);
             attackCount = 0;
             return totalAttack;
         }
@@ -92,7 +92,7 @@ namespace yayu.Battle
         {
             if (attackCount > 0)
             {
-                YDebugger.Log("Interval Attack !!!!!", attackCount);
+                //YDebugger.Log("Interval Attack !!!!!", attackCount);
                 return true;
             }
             attackCount = 0;

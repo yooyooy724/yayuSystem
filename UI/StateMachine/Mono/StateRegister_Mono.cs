@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace yayu.StateMachine
+namespace yayu.UI.StateMachine
 {
     public class StateRegister_Mono : MonoBehaviour
     {

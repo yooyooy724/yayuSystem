@@ -5,7 +5,7 @@ using yayu.Inventory;
 using System.Linq;
 using UnityEngine.Assertions.Must;
 
-namespace yayu.Inventory
+namespace yayu.UI.Inventory
 {
     public class InventoryUIControl_SelectAndClaim : MonoBehaviour
     {
@@ -20,7 +20,7 @@ namespace yayu.Inventory
         private InventoryControl inventoryControl;
         [SerializeField] private InventoryUI inventoryUI;
         [SerializeField] private ItemDisplayPanelUnit clickUnit, hoverUnit;
-        [SerializeField] private BUTTON claimButton;
+        [SerializeField] private UIButtonMono claimButton;
 
         private Action<IItem> onClaimAction;
 
@@ -45,7 +45,7 @@ namespace yayu.Inventory
             inventoryUI.Init(inventory);
         }
 
-        private void UpdateSlotInfo(ISlot slot, TEXT nameText, TEXT descriptionText, GameObject panel, BUTTON button)
+        private void UpdateSlotInfo(ISlot slot, TEXT nameText, TEXT descriptionText, GameObject panel, UIButtonMono button)
         {
             if (slot != null && slot.Item != null)
             {
@@ -76,7 +76,7 @@ namespace yayu.Inventory
 
         private void SetupClaimButton()
         {
-            claimButton.AddListener_onClick(() =>
+            claimButton.AddListener_Click(() =>
             {
                 var clickedItem = inventoryControl.ClickedSlots.FirstOrDefault()?.Item;
                 if (clickedItem != null)

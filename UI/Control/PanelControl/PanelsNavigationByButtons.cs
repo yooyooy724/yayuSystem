@@ -1,9 +1,9 @@
 using UnityEngine;
-
+using yayu.UI;
 public class PanelsNavigationByButtons : MonoBehaviour
 {
-    [SerializeField] private BUTTON nextButton;
-    [SerializeField] private BUTTON previousButton;
+    [SerializeField] private UIButtonMono nextButton;
+    [SerializeField] private UIButtonMono previousButton;
     [SerializeField] private PANEL[] panels;
     private int currentIndex;
 
@@ -11,12 +11,12 @@ public class PanelsNavigationByButtons : MonoBehaviour
     {
         currentIndex = 0; // 初期インデックスを0に設定
 
-        nextButton.AddListener_onClick(() =>
+        nextButton.AddListener_Click(() =>
         {
             NavigateToPanel((currentIndex + 1) % panels.Length);
         });
 
-        previousButton.AddListener_onClick(() =>
+        previousButton.AddListener_Click(() =>
         {
             NavigateToPanel((currentIndex - 1 + panels.Length) % panels.Length);
         });

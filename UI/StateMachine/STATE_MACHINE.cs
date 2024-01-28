@@ -1,12 +1,12 @@
 using System;
 using UnityEngine;
 
-namespace yayu.StateMachine
+namespace yayu.UI.StateMachine
 {
     public enum StateMachineKind
     {
         // •K—v‚É‰‚¶‚Ä•ÒW‚·‚é
-        Main, Sub
+        Main, Game, 
     }
     public class STATE_MACHINE : MonoBehaviour
     {

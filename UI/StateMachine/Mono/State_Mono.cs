@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace yayu.StateMachine
+namespace yayu.UI.StateMachine
 {
     public class State_Mono : MonoBehaviour, IState
     {

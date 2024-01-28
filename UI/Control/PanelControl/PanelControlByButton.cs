@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using yayu.UI;
 
 public class PanelControlByButton : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class PanelControlByButton : MonoBehaviour
         openAndClose
     }
     [SerializeField] PanelControlType containerControlType;
-    [SerializeField] BUTTON button;
+    [SerializeField] UIButtonMono button;
     PANEL panel;
     private void Start()
     {
@@ -22,7 +23,7 @@ public class PanelControlByButton : MonoBehaviour
             PanelControlType.openAndClose => SwitchContainer,
             _ => () => { }
         };
-        button.AddListener_onClick(() => action());
+        button.AddListener_Click(() => action());
     }
 
     private void SwitchContainer()

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using yayu.UI;
 
-namespace yayu.Inventory
+namespace yayu.UI.Inventory
 {
     using System;
     using UniRx;
@@ -13,7 +14,7 @@ namespace yayu.Inventory
     public class SlotUI : MonoBehaviour
     {
         private ISlot slot;
-        [SerializeField] private BUTTON buttonComponent;
+        [SerializeField] private UIButtonMono buttonComponent;
         [SerializeField] private Image iconComponent;
         [SerializeField] private List<GameObject> objectsToEnableOnHovered;
         [SerializeField] private List<GameObject> objectsToDisableOnHovered;
@@ -42,14 +43,14 @@ namespace yayu.Inventory
                 .Subscribe(UpdateGameObjectsOnClicked).AddTo(this);
 
             // ボタンのイベントリスナーを設定
-            buttonComponent.AddListener_onClick(() => slot.OnClick.Invoke(slot.Item));
-            buttonComponent.AddListener_onEnter(() => slot.OnEnter.Invoke(slot.Item));
-            buttonComponent.AddListener_onExit(() => slot.OnExit.Invoke(slot.Item));
+            buttonComponent.AddListener_Click(() => slot.OnClick.Invoke(slot.Item));
+            buttonComponent.AddListener_Enter(() => slot.OnEnter.Invoke(slot.Item));
+            buttonComponent.AddListener_Exit(() => slot.OnExit.Invoke(slot.Item));
 
             // ボタンのイベントリスナーを設定
-            buttonComponent.AddListener_onClick(() => YDebugger.Log("OnClick"));
-            buttonComponent.AddListener_onEnter(() => YDebugger.Log("OnEnter"));
-            buttonComponent.AddListener_onExit(() => YDebugger.Log("OnExit"));
+            buttonComponent.AddListener_Click(() => YDebugger.Log("OnClick"));
+            buttonComponent.AddListener_Enter(() => YDebugger.Log("OnEnter"));
+            buttonComponent.AddListener_Exit(() => YDebugger.Log("OnExit"));
 
         }
 

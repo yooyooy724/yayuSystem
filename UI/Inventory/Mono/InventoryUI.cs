@@ -5,7 +5,7 @@ using UniRx;
 using yayu.Inventory;
 
 
-namespace yayu.Inventory
+namespace yayu.UI.Inventory
 {
     public class InventoryUI : MonoBehaviour
     {

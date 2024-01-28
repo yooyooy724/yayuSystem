@@ -1,9 +1,10 @@
 using UnityEngine;
+using yayu.UI;
 
 public class PanelControlByButtons : MonoBehaviour
 {
-    [SerializeField] private BUTTON[] openButtons;
-    [SerializeField] private BUTTON[] closeButtons;
+    [SerializeField] private UIButtonMono[] openButtons;
+    [SerializeField] private UIButtonMono[] closeButtons;
 
     [SerializeField] private PANEL panel;
 
@@ -11,11 +12,11 @@ public class PanelControlByButtons : MonoBehaviour
     {
         foreach (var button in openButtons)
         {
-            button.AddListener_onClick(panel.Show);
+            button.AddListener_Click(panel.Show);
         }
         foreach (var button in closeButtons)
         {
-            button.AddListener_onClick(panel.Hide);
+            button.AddListener_Click(panel.Hide);
         }
     }
 }
