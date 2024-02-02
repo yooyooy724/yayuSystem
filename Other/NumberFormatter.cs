@@ -24,6 +24,7 @@ public class NumberFormatter
         decimalNumber, //����
         integerNumber,
         time,
+        mul100,
     }
 
     public enum HeadType
@@ -89,12 +90,14 @@ public class NumberFormatter
             if (notationType == NotationType.named)
             {
                 if (type is NumberType.decimalNumber) return DoubleToStringWithSuffix(number, digit);
-                if (type is NumberType.integerNumber) return DoubleToStringWithSuffix(number, digit, true);
+                else if (type is NumberType.integerNumber) return DoubleToStringWithSuffix(number, digit, true);
+                else if (type is NumberType.mul100) return DoubleToStringWithSuffix(number * 100, digit);
             }
             else if (notationType == NotationType.scientific)
             {
                 if (type is NumberType.decimalNumber) return DoubleToStringScientific(number, digit);
-                if (type is NumberType.integerNumber) return DoubleToStringScientific(number, digit, true);
+                else if (type is NumberType.integerNumber) return DoubleToStringScientific(number, digit, true);
+                else if (type is NumberType.mul100) return DoubleToStringScientific(number * 100, digit);
             }
         }
 

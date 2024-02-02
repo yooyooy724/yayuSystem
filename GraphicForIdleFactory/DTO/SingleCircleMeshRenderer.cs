@@ -1,5 +1,6 @@
 using UnityEngine;
-using UniRx;
+using R3;
+using System;
 
 namespace yayu.DTO
 {
@@ -59,6 +60,7 @@ namespace yayu.DTO
         float radius;
         float alpha;
         float maxRadius => circleData == null ? 0 : circleData.Radius * scaleMultiplier;
+        IDisposable disposable;
 
         public void Init(ICircleDataAccessor dataAccessor)
         {
@@ -67,7 +69,7 @@ namespace yayu.DTO
             sprite = GetComponentInChildren<SpriteRenderer>();
 
             // IsActive‚Ì•ÏX‚ðw“Ç
-            Observable.EveryUpdate()
+            var d1 = Observable.EveryUpdate()
                 .Select(_ => circleData.IsActive())
                 .DistinctUntilChanged()
                 .Where(_ => _ == true)
@@ -76,19 +78,19 @@ namespace yayu.DTO
                     this.isActive = isActive;
                     this.radius = maxRadius;
                     this.alpha = 1f;
-                })
-                .AddTo(this);
+                });
 
             // position‚Ì•ÏX‚ðw“Ç
-            Observable.EveryUpdate()
+            var d2 = Observable.EveryUpdate()
                 .Where(_ => circleData.IsActive())
                 .Select(_ => circleData.Position)
                 .DistinctUntilChanged()
                 .Subscribe(pos =>
                 {
                     transform.position = new Vector3(pos.x, pos.y, 0);
-                })
-                .AddTo(this);
+                });
+
+            disposable = Disposable.Combine(d1, d2);
         }
 
         private void Update()
@@ -108,6 +110,11 @@ namespace yayu.DTO
             col.a = MyMath.Remap(alpha, 0, 1, 0f, maxAlpha);
             sprite.color = col;
             transform.localScale = Vector3.one * radius;
+        }
+
+        private void OnDestroy()
+        {
+            disposable.Dispose();
         }
     }
 }

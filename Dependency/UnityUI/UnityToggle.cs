@@ -2,43 +2,46 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-[RequireComponent(typeof(Toggle))]
-public class UnityToggle : TOGGLE
+namespace yayu.UI
 {
-    private Toggle _toggle;
-    private Toggle toggle 
+    [RequireComponent(typeof(Toggle))]
+    public class UnityToggle : UIToggleMono
     {
-        get => _toggle == null ? _toggle = GetComponent<Toggle>() : _toggle;
-    }
+        private Toggle _toggle;
+        private Toggle toggle
+        {
+            get => _toggle == null ? _toggle = GetComponent<Toggle>() : _toggle;
+        }
 
-    public override bool isOn
-    {
-        get { return toggle.isOn; }
-        set { toggle.isOn = value; }
-    }
+        public override bool isOn
+        {
+            get { return toggle.isOn; }
+            set { toggle.isOn = value; }
+        }
 
-    Action<bool> action;
-    bool isInit = false;
+        Action<bool> action;
+        bool isInit = false;
 
-    public override void AddListener_OnValueChanged(Action<bool> action)
-    {
-        if (!isInit) Init();
-        this.action += action;
-    }
+        public override void AddListener_OnValueChanged(Action<bool> action)
+        {
+            if (!isInit) Init();
+            this.action += action;
+        }
 
-    public override void RemoveListener_OnValueChanged(Action<bool> action)
-    {
-        this.action -= action;
-    }
+        public override void RemoveListener_OnValueChanged(Action<bool> action)
+        {
+            this.action -= action;
+        }
 
-    public override void RemoveAllListeners()
-    {
-        this.action = null;
-    }
+        public override void RemoveAllListeners()
+        {
+            this.action = null;
+        }
 
-    private void Init()
-    {
-        toggle.onValueChanged.AddListener((_) => action?.Invoke(_));
-        isInit = true;
+        private void Init()
+        {
+            toggle.onValueChanged.AddListener((_) => action?.Invoke(_));
+            isInit = true;
+        }
     }
 }

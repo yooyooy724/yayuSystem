@@ -1,5 +1,7 @@
+using R3;
+using System;
 using System.Collections.Generic;
-using UniRx;
+using R3;
 using UnityEngine;
 
 namespace yayu.UI.StateMachine
@@ -27,6 +29,8 @@ namespace yayu.UI.StateMachine
         [SerializeField] private List<GameObject> objectsToDisable;
         bool isInited = false;
 
+        IDisposable disposable = null;
+
         private void Start()
         {
             if (_state == null) state = STATE_MACHINE.GetStateMachine(targetStateMachine).GetState(state_path);
@@ -37,7 +41,7 @@ namespace yayu.UI.StateMachine
                 Debug.LogWarning($"State not found for the button '{gameObject.name}'");
                 return;
             }
-            STATE_MACHINE.GetStateMachine(targetStateMachine).ObserveEveryValueChanged(_ => _.GetCurrentStatePath())
+            disposable = Observable.EveryValueChanged(STATE_MACHINE.GetStateMachine(targetStateMachine), _ => _.GetCurrentStatePath())
                 .Subscribe(_ => UpdateGameObjects(_.Equals(state.path)));
         }
 
@@ -82,6 +86,11 @@ namespace yayu.UI.StateMachine
             {
                 if (obj != null) obj.SetActive(!isState);
             }
+        }
+
+        private void OnDestroy()
+        {
+            disposable?.Dispose();
         }
     }
 }

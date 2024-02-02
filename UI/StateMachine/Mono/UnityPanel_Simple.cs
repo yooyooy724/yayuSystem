@@ -1,9 +1,9 @@
 using UnityEngine;
-using UnityEngine.UI;
+using yayu.UI;
 
 namespace yayu.StateMachine
 {
-    public class UnityPanel_Simple : PANEL
+    public class UnityPanel_Simple : UIPanelMono
     {
         public enum InitialAction
         {
@@ -11,8 +11,16 @@ namespace yayu.StateMachine
             Hide,
             None
         }
-        public override bool isShow => _isShow;
-        [SerializeField] bool _isShow;
+        public override bool isOn
+        {
+            get => gameObject.activeSelf;
+            set
+            {
+                if (isOn == value) return;
+                if (value) Show();
+                else Hide();
+            }
+        }
         [SerializeField] InitialAction initialAction = InitialAction.None;
 
         private void Awake()
@@ -33,14 +41,12 @@ namespace yayu.StateMachine
 
         public override void Show()
         {
-            _isShow = true;
-            gameObject.SetActive(_isShow);
+            gameObject.SetActive(true);
         }
 
         public override void Hide()
         {
-            _isShow = false;
-            gameObject.SetActive(_isShow);
+            gameObject.SetActive(false);
         }
     }
 

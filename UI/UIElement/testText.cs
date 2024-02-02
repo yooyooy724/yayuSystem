@@ -1,18 +1,21 @@
 using UnityEngine;
 
-public class testText : MonoBehaviour
+namespace yayu.UI
 {
-    [SerializeField] private TEXT textPresenter;
-    private float deltaTime = 0.0f;
-
-    private void Update()
+    public class testText : MonoBehaviour
     {
-        if(Time.frameCount % 10 == 0)
-        {
-            deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f; // Smooth the delta time calculation
-            float fps = 1.0f / deltaTime;
+        [SerializeField] private UITextMono textPresenter;
+        private float deltaTime = 0.0f;
 
-            textPresenter.SetText($"FPS: {Mathf.CeilToInt(fps)}");
+        private void Update()
+        {
+            if (Time.frameCount % 10 == 0)
+            {
+                deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f; // Smooth the delta time calculation
+                float fps = 1.0f / deltaTime;
+
+                textPresenter.SetText($"FPS: {Mathf.CeilToInt(fps)}");
+            }
         }
     }
 }

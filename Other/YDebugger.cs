@@ -1,5 +1,5 @@
 using UnityEngine;
-using yayu.ui;
+using yayu.UI;
 //namespace Yayu.Utility
 //{
     public class YDebugger
