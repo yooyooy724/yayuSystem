@@ -7,14 +7,14 @@ namespace yayu.UI
         void Hide();
     }
 
-    public interface IPanelUIAccess
+    public interface IPanelUIAccessible
     {
         bool IsOn();
     }
 
-    public class UIPanel: IPanel, IPanelUIAccess
+    public class UIPanel: UIElement, IPanel, IPanelUIAccessible
     {
-        public UIPanel(bool initialState)
+        public UIPanel(bool initialState, string id) : base(id)
         {
             this.isOn = initialState;
         }

@@ -9,13 +9,15 @@ namespace yayu.UI
     {
         float rate { get; set; }
     }
-    public interface IGaugeUIAccess
+    internal interface IGaugeUIAccess
     {
         float Rate();
     }
 
-    public class UIGauge: IGauge, IGaugeUIAccess
+    public class UIGauge: UIElement, IGauge, IGaugeUIAccess
     {
+        public UIGauge(string id) : base(id) { }
+
         float _rate;
         public float rate 
         { 

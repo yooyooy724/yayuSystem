@@ -10,7 +10,7 @@ namespace yayu.UI
         void RemoveListener_OnValueChanged(Action<bool> action);
     }
 
-    public interface IToggleUIAccess
+    public interface IToggleUIAccessible
     {
         bool IsOn();
         void ChangeValue();
@@ -18,13 +18,15 @@ namespace yayu.UI
 
     public interface IToggleStateApplier
     {
-        bool OnValueChanged(bool inOn);
-        void AddListener_OnActForChangeValue(Action action);
+        void OnValueChanged(bool inOn);
+        void AddListener_ForChangeValue(Action action);
 
     }
 
-    public class UIToggle : IToggle, IToggleUIAccess
+    public class UIToggle : UIElement, IToggle, IToggleUIAccessible
     {
+        public UIToggle(string id): base(id) { }
+
         bool _isOn;
         public bool isOn 
         { 

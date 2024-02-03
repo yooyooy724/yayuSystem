@@ -8,7 +8,9 @@ namespace yayu.UI
         public static bool isDebugMode = false;
         void Start()
         {
-            toggle.AddListener_OnValueChanged(_ => isDebugMode = _);
+            UIToggle tgl = new UIToggle("");
+            tgl.AddListener_OnValueChanged(_ => isDebugMode = _);
+            UIElementConnection.ConnectToggle(tgl, toggle);
         }
     }
 }

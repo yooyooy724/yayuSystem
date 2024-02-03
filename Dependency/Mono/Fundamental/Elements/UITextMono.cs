@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace yayu.UI
 {
-    public abstract class UITextMono: MonoBehaviour, IText
+    public abstract class UITextMono: UIElementMono, IText
     {
+        public override Type UIAccessible => typeof(ITextUIAccessible);
         public abstract string text { get; set; }
         public abstract void SetText(string text);
         public abstract Color color { get; set; }

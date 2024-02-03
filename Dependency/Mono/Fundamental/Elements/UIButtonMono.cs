@@ -5,11 +5,12 @@ using UnityEngine;
 namespace yayu.UI
 {
     /// <summary>
-    /// Mono‚ÈButtonƒNƒ‰ƒX
-    /// IButtonControl‚ğŠJ”­ŠÂ‹«ˆË‘¶‚ÌIButton‚É“n‚·
+    /// MonoãªButtonã‚¯ãƒ©ã‚¹
+    /// IButtonControlã‚’é–‹ç™ºç’°å¢ƒä¾å­˜ã®IButtonã«æ¸¡ã™
     /// </summary>
-    public abstract class UIButtonMono : MonoBehaviour, IButton
+    public abstract class UIButtonMono : UIElementMono, IButton
     {
+        public override Type UIAccessible => typeof(IButtonUIAccessible); 
         public abstract bool interactable { get; set; }
         public abstract bool visible { get; set; }
         public abstract void AddListener_Click(Action action);

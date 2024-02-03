@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace yayu.UI
 {
-    public abstract class UIToggleMono : MonoBehaviour, IToggle
+    public abstract class UIToggleMono : UIElementMono, IToggleStateApplier
     {
-        public abstract bool isOn { get; set; }
-        public abstract void AddListener_OnValueChanged(Action<bool> action);
-        public abstract void RemoveListener_OnValueChanged(Action<bool> action);
-        public abstract void RemoveAllListeners();
+        public override Type UIAccessible => typeof(IToggleUIAccessible);
+        public abstract void OnValueChanged(bool inOn);
+        public abstract void AddListener_ForChangeValue(Action action);
     }
 }
 

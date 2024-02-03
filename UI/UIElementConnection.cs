@@ -4,31 +4,30 @@ using R3;
 namespace yayu.UI
 {
     /// <summary>
-    /// Domain‘¤‚ªUI‘¤‚ÉTrigger‚Ì”­‰Î‚ğˆÏ÷‚µADomain‘¤‚Ìó‘ÔiInteractable‚È‚Çj‚ğUI‘¤‚É—¬‚·
+    /// Domainå´ãŒUIå´ã«Triggerã®ç™ºç«ã‚’å§”è­²ã—ã€Domainå´ã®çŠ¶æ…‹ï¼ˆInteractableãªã©ï¼‰ã‚’UIå´ã«æµã™
     /// </summary>
-    public class UIElementConnection
+    internal class UIElementConnection
     {
-        public static IDisposable ConnectButton(IButtonUIAccess button_domainSide, IButton button_UISIde)
+        public static IDisposable ConnectButton(IButtonUIAccessible button_domainSide, IButton button_UISIde)
         {
             button_UISIde.AddListener_Click(button_domainSide.OnClick);
             button_UISIde.AddListener_Enter(button_domainSide.OnEnter);
             button_UISIde.AddListener_Exit(button_domainSide.OnExit);
-            var d1 = Observable.EveryValueChanged(button_domainSide, _ => _.IsVisible()).Subscribe(_ => button_UISIde.visible = _);
-            var d2 = Observable.EveryValueChanged(button_domainSide, _ => _.IsInteractable()).Subscribe(_ => button_UISIde.interactable = _);
-            return Disposable.Combine(d1, d2);
+            var d1 = Observable.EveryValueChanged(button_domainSide, _ => _.IsInteractable()).Subscribe(_ => button_UISIde.interactable = _);
+            return d1;
         }
-        public static IDisposable ConnectText(IToggleUIAccess toggle_domainSide, IToggleStateApplier toggle_UISIde)
+        public static IDisposable ConnectToggle(IToggleUIAccessible toggle_domainSide, IToggleStateApplier toggle_UISIde)
         {
-            toggle_UISIde.AddListener_OnActForChangeValue(toggle_domainSide.ChangeValue);
+            toggle_UISIde.AddListener_ForChangeValue(toggle_domainSide.ChangeValue);
             var d1 = Observable.EveryValueChanged(toggle_domainSide, _ => _.IsOn()).Subscribe(_ => toggle_UISIde.OnValueChanged(_));
             return d1;
         }
-        public static IDisposable ConnectText(ITextUIAccess text_domainSide, IText text_uiSide)
+        public static IDisposable ConnectText(ITextUIAccessible text_domainSide, IText text_uiSide)
         {
             var d1 = Observable.EveryValueChanged(text_domainSide, _ => _.Text()).Subscribe(_ => text_uiSide.text = _);
             return d1;
         }
-        public static IDisposable ConnectPanel(IPanelUIAccess panel_domainSide, IPanel panel_uiSIde)
+        public static IDisposable ConnectPanel(IPanelUIAccessible panel_domainSide, IPanel panel_uiSIde)
         {
             var d1 = Observable.EveryValueChanged(panel_domainSide, _ => _.IsOn()).Subscribe(_ => panel_uiSIde.isOn = _);
             return d1;
@@ -37,6 +36,41 @@ namespace yayu.UI
         {
             var d1 = Observable.EveryValueChanged(gauge_domainSide, _ => _.Rate()).Subscribe(_ => gauge_uiSIde.rate = _);
             return d1;
+        }
+
+        public static IDisposable Connect(IUIElement element, UIElementContainer container)
+        {
+            switch (element)
+            {
+                case IButton button:  
+                    var dButton = container.GetElement<UIButton>(element.Path());
+                    if (dButton != null) return ConnectButton(dButton, button);
+                    YDebugger.LogError("Nullã£ãŸ");
+                    break;
+                case IText text:
+                    var dText = container.GetElement<UIText>(element.Path());
+                    if (dText != null) return ConnectText(dText, text);
+                    YDebugger.LogError("Nullã£ãŸ");
+                    break;
+                case IToggleStateApplier toggle:
+                    var dToggle = container.GetElement<UIToggle>(element.Path());
+                    if (dToggle != null) return ConnectToggle(dToggle, toggle);
+                    YDebugger.LogError("Nullã£ãŸ");
+                    break;
+                case IPanel panel:
+                    var dPanel = container.GetElement<UIPanel>(element.Path());
+                    if (dPanel != null) return ConnectPanel(dPanel, panel);
+                    YDebugger.LogError("Nullã£ãŸ");
+                    break;
+                case IGauge gauge:
+                    var dGauge = container.GetElement<UIGauge>(element.Path());
+                    if (dGauge != null) return ConnectGauge(dGauge, gauge);
+                    YDebugger.LogError("Nullã£ãŸ");
+                    break;
+                default: 
+                    break;
+            }
+            return Disposable.Empty;
         }
     }
 }

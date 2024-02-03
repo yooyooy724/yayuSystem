@@ -5,12 +5,11 @@ using yayu.Event;
 namespace yayu.UI
 {
     /// <summary>
-    /// ‘Š‘Î“I‚ÉDomain‘¤‚ÉŒöŠJ
+    /// ç›¸å¯¾çš„ã«Domainå´ã«å…¬é–‹
     /// </summary>
     public interface IButton
     {
         bool interactable { get; set; }
-        bool visible { get; set; }
         void AddListener_Click(Action action);
         void AddListener_Enter(Action action);
         void AddListener_Exit(Action action);
@@ -21,28 +20,30 @@ namespace yayu.UI
     }
 
     /// <summary>
-    /// ‘Š‘Î“I‚ÉUI‘¤‚ÉŒöŠJ
-    /// OnClick‚È‚Ç‚ÌTrigger‚ÆIsInteractable‚È‚Ç‚ÌState‚ğ‚Â
+    /// ç›¸å¯¾çš„ã«UIå´ã«å…¬é–‹
+    /// OnClickãªã©ã®Triggerã¨IsInteractableãªã©ã®Stateã‚’æŒã¤
     /// </summary>
-    public interface IButtonUIAccess
+    internal interface IButtonUIAccessible
     {
         void OnClick();
         void OnEnter();
         void OnExit();
         bool IsInteractable();
-        bool IsVisible();
     }
 
     /// <summary>
-    /// Pure‚ÈButtonƒNƒ‰ƒX
-    /// IButtonUIAccess‚ğŠJ”­ŠÂ‹«ˆË‘¶‚ÌIButton‚É“n‚·
+    /// PureãªButtonã‚¯ãƒ©ã‚¹
+    /// IButtonUIAccessã‚’é–‹ç™ºç’°å¢ƒä¾å­˜ã®IButtonã«æ¸¡ã™
     /// </summary>
-    public class UIButton : IButton, IButtonUIAccess
+    public class UIButton : UIElement, IButton, IButtonUIAccessible
     {
+        // constructor
+        public UIButton(string id) : base(id) { }
+
+        //
         CustomEvent onClick = new(), onEnter = new(), onExit = new();
 
         public bool interactable { get; set; }
-        public bool visible { get; set; }
 
         public void AddListener_Click(Action action) => onClick.AddListener(action);
         public void AddListener_Enter(Action action) => onEnter.AddListener(action);
@@ -63,6 +64,5 @@ namespace yayu.UI
         public void OnEnter() => onEnter.Invoke();
         public void OnExit() => onExit.Invoke();
         public bool IsInteractable() => interactable;
-        public bool IsVisible() => visible;
     }
 }
