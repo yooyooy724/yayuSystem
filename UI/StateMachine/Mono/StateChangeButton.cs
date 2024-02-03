@@ -1,17 +1,19 @@
+using R3;
+using System;
 using System.Collections.Generic;
-using UniRx;
+using R3;
 using UnityEngine;
 
-namespace yayu.StateMachine
+namespace yayu.UI.StateMachine
 {
     public class StateChangeButton : MonoBehaviour
     {
-        private BUTTON _button;
-        private BUTTON button
+        private UIButtonMono _button;
+        private UIButtonMono button
         {
             get
             {
-                if (_button == null) _button = GetComponent<BUTTON>();
+                if (_button == null) _button = GetComponent<UIButtonMono>();
                 return _button;
             }
         }
@@ -27,6 +29,8 @@ namespace yayu.StateMachine
         [SerializeField] private List<GameObject> objectsToDisable;
         bool isInited = false;
 
+        IDisposable disposable = null;
+
         private void Start()
         {
             if (_state == null) state = STATE_MACHINE.GetStateMachine(targetStateMachine).GetState(state_path);
@@ -37,7 +41,7 @@ namespace yayu.StateMachine
                 Debug.LogWarning($"State not found for the button '{gameObject.name}'");
                 return;
             }
-            STATE_MACHINE.GetStateMachine(targetStateMachine).ObserveEveryValueChanged(_ => _.GetCurrentStatePath())
+            disposable = Observable.EveryValueChanged(STATE_MACHINE.GetStateMachine(targetStateMachine), _ => _.GetCurrentStatePath())
                 .Subscribe(_ => UpdateGameObjects(_.Equals(state.path)));
         }
 
@@ -49,7 +53,7 @@ namespace yayu.StateMachine
         public void Init()
         {
             if (isInited) return;
-            button.AddListener_onClick(() => ChangeState());
+            button.AddListener_Click(() => ChangeState());
             isInited = true;
         }
 
@@ -82,6 +86,11 @@ namespace yayu.StateMachine
             {
                 if (obj != null) obj.SetActive(!isState);
             }
+        }
+
+        private void OnDestroy()
+        {
+            disposable?.Dispose();
         }
     }
 }

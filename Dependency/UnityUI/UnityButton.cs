@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using yayu.UI;
 
 [RequireComponent(typeof(CanvasGroup))]
-public class UnityButton : BUTTON, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class UnityButton : UIButtonMono, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     private CanvasGroup canvasGroup;
     private event Action onClick;
@@ -35,32 +36,32 @@ public class UnityButton : BUTTON, IPointerEnterHandler, IPointerExitHandler, IP
         }
     }
 
-    public override void AddListener_onClick(Action action)
+    public override void AddListener_Click(Action action)
     {
         onClick += action;
     }
 
-    public override void AddListener_onEnter(Action action)
+    public override void AddListener_Enter(Action action)
     {
         onEnter += action;
     }
 
-    public override void AddListener_onExit(Action action)
+    public override void AddListener_Exit(Action action)
     {
         onExit += action;
     }
 
-    public override void RemoveListener_onClick(Action action)
+    public override void RemoveListener_Click(Action action)
     {
         onClick -= action;
     }
 
-    public override void RemoveListener_onEnter(Action action)
+    public override void RemoveListener_Enter(Action action)
     {
         onEnter -= action;
     }
 
-    public override void RemoveListener_onExit(Action action)
+    public override void RemoveListener_Exit(Action action)
     {
         onExit -= action;
     }

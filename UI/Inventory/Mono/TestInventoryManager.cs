@@ -2,13 +2,13 @@ using UnityEngine;
 using yayu.Inventory;
 using System;
 
-namespace yayu.Inventory
+namespace yayu.UI.Inventory
 {
     public class TestInventoryManager : MonoBehaviour
     {
         [SerializeField] private InventoryUIControl_SelectAndClaim inventoryUIControl;
         [SerializeField] private int inventoryCapacity = 10; // インベントリの容量
-        [SerializeField] private BUTTON addItemButton;
+        [SerializeField] private UIButtonMono addItemButton;
 
         Inventory<Slot> inventory;
 
@@ -21,7 +21,7 @@ namespace yayu.Inventory
             inventoryUIControl.Init(inventory);
 
             // テスト用アイテムの追加
-            addItemButton.AddListener_onClick(AddTestItemsToInventory);
+            addItemButton.AddListener_Click(AddTestItemsToInventory);
         }
 
         int i = 0;

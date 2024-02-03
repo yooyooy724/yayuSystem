@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
-namespace yayu.StateMachine
+namespace yayu.UI.StateMachine
 {
     public interface IState
     {

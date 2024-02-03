@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using UniRx;
+using R3;
 using UnityEngine;
 
-namespace yayu.StateMachine
+namespace yayu.UI.StateMachine
 {
     public class StateAndPanelSyncControl : MonoBehaviour
     {
@@ -14,9 +14,9 @@ namespace yayu.StateMachine
         [SerializeField] private string state_path;
 
         [Header("Others")]
-        [SerializeField] private List<PANEL> panelsToEnable;
+        [SerializeField] private List<UIPanelMono> panelsToEnable;
         [SerializeField] private List<GameObject> objectsToEnable;
-        [SerializeField] private List<PANEL> panelsToDisable;
+        [SerializeField] private List<UIPanelMono> panelsToDisable;
         [SerializeField] private List<GameObject> objectsToDisable;
         bool isInited = false;
 

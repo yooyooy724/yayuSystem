@@ -1,29 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using yayu.UI;
+using System;
+using R3;
+using UnityEngine.UI;
+using yayu.Inventory;
 
-namespace yayu.Inventory
+namespace yayu.UI.Inventory
 {
-    using System;
-    using UniRx;
-    using UnityEngine;
-    using UnityEngine.UI;
-    using yayu.Inventory;
-
     public class SlotUI : MonoBehaviour
     {
         private ISlot slot;
-        [SerializeField] private BUTTON buttonComponent;
+        [SerializeField] private UIButtonMono buttonComponent;
         [SerializeField] private Image iconComponent;
         [SerializeField] private List<GameObject> objectsToEnableOnHovered;
         [SerializeField] private List<GameObject> objectsToDisableOnHovered;
         [SerializeField] private List<GameObject> objectsToEnableOnClicked;
         [SerializeField] private List<GameObject> objectsToDisableOnClicked;
+        IDisposable disposable;
+
         public void InjectSlot(ISlot newSlot)
         {
             slot = newSlot;
 
-            slot.ObserveEveryValueChanged(x => x.Item)
+            var d1 = Observable.EveryValueChanged(slot, x => x.Item)
                 .Subscribe(item =>
                 {
                     if (item != null)
@@ -34,22 +35,24 @@ namespace yayu.Inventory
                     {
                         ClearIcon(item);
                     }
-                }).AddTo(this);
+                });
 
-            slot.ObserveEveryValueChanged(x => x.isHovered)
-                .Subscribe(UpdateGameObjectsOnHovered).AddTo(this);
-            slot.ObserveEveryValueChanged(x => x.isClicked)
-                .Subscribe(UpdateGameObjectsOnClicked).AddTo(this);
+            var d2 = Observable.EveryValueChanged(slot, x => x.isHovered)
+                .Subscribe(UpdateGameObjectsOnHovered);
+            var d3 = Observable.EveryValueChanged(slot, x => x.isClicked)
+                .Subscribe(UpdateGameObjectsOnClicked);
 
-            // ボタンのイベントリスナーを設定
-            buttonComponent.AddListener_onClick(() => slot.OnClick.Invoke(slot.Item));
-            buttonComponent.AddListener_onEnter(() => slot.OnEnter.Invoke(slot.Item));
-            buttonComponent.AddListener_onExit(() => slot.OnExit.Invoke(slot.Item));
+            disposable = Disposable.Combine(d1, d2, d3);
 
             // ボタンのイベントリスナーを設定
-            buttonComponent.AddListener_onClick(() => YDebugger.Log("OnClick"));
-            buttonComponent.AddListener_onEnter(() => YDebugger.Log("OnEnter"));
-            buttonComponent.AddListener_onExit(() => YDebugger.Log("OnExit"));
+            buttonComponent.AddListener_Click(() => slot.OnClick.Invoke(slot.Item));
+            buttonComponent.AddListener_Enter(() => slot.OnEnter.Invoke(slot.Item));
+            buttonComponent.AddListener_Exit(() => slot.OnExit.Invoke(slot.Item));
+
+            // ボタンのイベントリスナーを設定
+            buttonComponent.AddListener_Click(() => YDebugger.Log("OnClick"));
+            buttonComponent.AddListener_Enter(() => YDebugger.Log("OnEnter"));
+            buttonComponent.AddListener_Exit(() => YDebugger.Log("OnExit"));
 
         }
 
@@ -101,6 +104,7 @@ namespace yayu.Inventory
         {
             // リスナーを削除
             buttonComponent.RemoveAllListeners();
+            disposable.Dispose();
         }
 
     }

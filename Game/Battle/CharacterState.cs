@@ -14,7 +14,7 @@ namespace yayu.Battle
             set
             {
                 _BehaviorState = value;
-                YDebugger.Log("::::::::::::::::::::::BehaviorState Update", _BehaviorState);
+                //YDebugger.Log("::::::::::::::::::::::BehaviorState Update", _BehaviorState);
             }
         }
 

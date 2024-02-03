@@ -1,13 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class UIDebugMode : MonoBehaviour
+namespace yayu.UI
 {
-    [SerializeField] TOGGLE toggle;
-    public static bool isDebugMode = false;
-    void Start()
+    public class UIDebugMode : MonoBehaviour
     {
-        toggle.AddListener_OnValueChanged(_ => isDebugMode = _);
+        [SerializeField] UIToggleMono toggle;
+        public static bool isDebugMode = false;
+        void Start()
+        {
+            toggle.AddListener_OnValueChanged(_ => isDebugMode = _);
+        }
     }
 }

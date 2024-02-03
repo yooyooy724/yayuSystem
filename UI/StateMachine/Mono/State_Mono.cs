@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace yayu.StateMachine
+namespace yayu.UI.StateMachine
 {
     public class State_Mono : MonoBehaviour, IState
     {
         [SerializeField] private string _path = "do not need to fill";
         [SerializeField] private List<State_Mono> _children = new();
-        private PANEL _panel;
-        private PANEL panel
+        private UIPanelMono _panel;
+        private UIPanelMono panel
         {
             get
             {
-                if (_panel == null) _panel = GetComponent<PANEL>();
+                if (_panel == null) _panel = GetComponent<UIPanelMono>();
                 return _panel;
             }
         }

@@ -1,7 +1,9 @@
+using Doozy.Runtime.UIManager.Containers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using yayu.UI;
 
 namespace yayu.StateMachine
 {
@@ -9,7 +11,7 @@ namespace yayu.StateMachine
     [RequireComponent(typeof(RectTransform))]
     [RequireComponent(typeof(CanvasGroup))]
     [RequireComponent(typeof(GraphicRaycaster))]
-    public class UnityPanel : PANEL
+    public class UnityPanel : UIPanelMono
     {
         public enum InitialAction
         {
@@ -17,7 +19,16 @@ namespace yayu.StateMachine
             Hide,
             None
         }
-        public override bool isShow => _isShow;
+        public override bool isOn
+        {
+            get => _isShow;
+            set
+            {
+                if (isOn == value) return;
+                if (value) Show();
+                else Hide();
+            }
+        }
         bool _isShow;
         [SerializeField] InitialAction initialAction = InitialAction.None;
         [SerializeField] bool resetPosition = true;

@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
-using UniRx;
+using R3;
 using yayu.Inventory;
 using System.Linq;
 using UnityEngine.Assertions.Must;
 
-namespace yayu.Inventory
+namespace yayu.UI.Inventory
 {
     public class InventoryUIControl_SelectAndClaim : MonoBehaviour
     {
@@ -13,39 +13,41 @@ namespace yayu.Inventory
         public class ItemDisplayPanelUnit
         {
             public GameObject panel;
-            public TEXT nameText;
-            public TEXT descriptionText;
+            public UITextMono nameText;
+            public UITextMono descriptionText;
         }
 
         private InventoryControl inventoryControl;
         [SerializeField] private InventoryUI inventoryUI;
         [SerializeField] private ItemDisplayPanelUnit clickUnit, hoverUnit;
-        [SerializeField] private BUTTON claimButton;
+        [SerializeField] private UIButtonMono claimButton;
 
         private Action<IItem> onClaimAction;
+
+        IDisposable disposable;
 
         public void Init(IInventory inventory)
         {
             inventoryControl = new InventoryControl(new IInventory[] { inventory }, true, true, true);
-            inventoryControl.ObserveEveryValueChanged(_ => _.ClickedSlots.FirstOrDefault())
+            var d1 = Observable.EveryValueChanged(inventoryControl, _ => _.ClickedSlots.FirstOrDefault())
                 .Subscribe(slot =>
                 {
                     hoverUnit.panel.SetActive(false);
                     UpdateSlotInfo(slot, clickUnit.nameText, clickUnit.descriptionText, clickUnit.panel, claimButton);
-                })
-                .AddTo(this);
+                });
 
-            inventoryControl.ObserveEveryValueChanged(_ => _.HoveredSlots.FirstOrDefault())
+            var d2 = Observable.EveryValueChanged(inventoryControl, _ => _.HoveredSlots.FirstOrDefault())
                 .Where(_ => _ != inventoryControl.ClickedSlots.FirstOrDefault())
-                .Subscribe(slot => UpdateSlotInfo(slot, hoverUnit.nameText, hoverUnit.descriptionText, hoverUnit.panel, null))
-                .AddTo(this);
+                .Subscribe(slot => UpdateSlotInfo(slot, hoverUnit.nameText, hoverUnit.descriptionText, hoverUnit.panel, null));
+
+            disposable = Disposable.Combine(d1, d2);
 
             SetupClaimButton();
 
             inventoryUI.Init(inventory);
         }
 
-        private void UpdateSlotInfo(ISlot slot, TEXT nameText, TEXT descriptionText, GameObject panel, BUTTON button)
+        private void UpdateSlotInfo(ISlot slot, UITextMono nameText, UITextMono descriptionText, GameObject panel, UIButtonMono button)
         {
             if (slot != null && slot.Item != null)
             {
@@ -76,7 +78,7 @@ namespace yayu.Inventory
 
         private void SetupClaimButton()
         {
-            claimButton.AddListener_onClick(() =>
+            claimButton.AddListener_Click(() =>
             {
                 var clickedItem = inventoryControl.ClickedSlots.FirstOrDefault()?.Item;
                 if (clickedItem != null)
@@ -84,6 +86,11 @@ namespace yayu.Inventory
                     onClaimAction?.Invoke(clickedItem);
                 }
             });
+        }
+
+        private void OnDestroy()
+        {
+            disposable?.Dispose();
         }
     }
 }

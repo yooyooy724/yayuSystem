@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace yayu.StateMachine
+namespace yayu.UI.StateMachine
 {
     public enum StateMachineKind
     {

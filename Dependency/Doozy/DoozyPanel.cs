@@ -1,25 +1,35 @@
 using Doozy.Runtime.UIManager.Containers;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(UIView))]
-public class DoozyPanel : PANEL
+namespace yayu.UI
 {
-    private UIContainer _uiContainer;
-    private UIContainer uiContainer
+    [RequireComponent(typeof(UIView))]
+    public class DoozyPanel : UIPanelMono
     {
-        get
+        private UIContainer _uiContainer;
+        private UIContainer uiContainer
         {
-            if (_uiContainer == null)
+            get
             {
-                _uiContainer = GetComponent<UIContainer>();
+                if (_uiContainer == null)
+                {
+                    _uiContainer = GetComponent<UIContainer>();
+                }
+                return _uiContainer;
             }
-            return _uiContainer;
         }
-    }
 
-    public override bool isShow { get => uiContainer.isVisible || uiContainer.isShowing; }
-    public override void Hide() => uiContainer.Hide();
-    public override void Show() => uiContainer.Show();
+        public override bool isOn 
+        { 
+            get => uiContainer.isVisible || uiContainer.isShowing; 
+            set 
+            {
+                if (isOn == value) return;
+                if(value) Show();
+                else Hide();
+            }
+        }
+        public override void Hide() => uiContainer.Hide();
+        public override void Show() => uiContainer.Show();
+    }
 }
