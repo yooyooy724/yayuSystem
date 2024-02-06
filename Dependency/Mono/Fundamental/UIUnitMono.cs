@@ -1,34 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Principal;
+using R3;
+using System;
 using UnityEngine;
 
-//namespace yayu.UI
-//{
-//    public class UIUnitMono : MonoBehaviour
-//    {
-//        UIElementContainer container;
-//        [SerializeField] bool selfInitializable;
-//        [SerializeField] string unitID;
-//        [SerializeField] UIElementMono[] elements;
+namespace yayu.UI
+{
+    public class UIUnitMono : MonoBehaviour
+    {
+        UIElementContainer container = UIElementContainerAccess.defaultContainer;
+        [SerializeField] UIElementMono[] elements;
 
-//        void Start()
-//        {
-//            if (selfInitializable)
-//            {
-//                Init(unitID);
-//            }
-//        }
+        IDisposable disposable;
 
-//        public Init(string unitID)
-//        {
-//            foreach (int element in elements)
-//            {
-//                UIElementConnection.Connect(
-//                    container.GetUIAccessable(UIIDentify.Combine(unitID, element.Id)),
-//                    element)
-    
-//        }
-//        }
-//    }
-//}
+        public void Init(string unitId)
+        {
+            var d = Disposable.CreateBuilder();
+            foreach (var element in elements)
+            {
+                element.parentId = unitId;
+                d.Add(UIElementConnection.Connect(element, container));
+            }
+            disposable = d.Build();
+        }
+
+        private void OnDestroy()
+        {
+            disposable?.Dispose();
+        }
+    }
+}

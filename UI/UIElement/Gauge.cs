@@ -14,9 +14,9 @@ namespace yayu.UI
         float Rate();
     }
 
-    public class UIGauge: UIElement, IGauge, IGaugeUIAccess
+    public class Gauge: UIElement, IGauge, IGaugeUIAccess
     {
-        public UIGauge(string id) : base(id) { }
+        public Gauge(string id) : base(id) { }
 
         float _rate;
         public float rate 

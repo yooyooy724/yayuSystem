@@ -1,20 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using R3;
 
 namespace yayu.UI 
 {
     public class UIElementInitializer : MonoBehaviour
     {
         UIElementMono[] elements;
-        UIElementContainer container;
+        UIElementContainer container = UIElementContainerAccess.defaultContainer;
+        IDisposable disposable;
         void Start()
         {
             elements = GetComponents<UIElementMono>();
+            var d = Disposable.CreateBuilder();
             foreach (var element in elements)
             {
-                UIElementConnection.Connect(element, container);
+                d.Add(UIElementConnection.Connect(element, container));
             }
+            disposable = d.Build();
+        }
+
+        private void OnDestroy()
+        {
+            disposable?.Dispose();
         }
     }
 }

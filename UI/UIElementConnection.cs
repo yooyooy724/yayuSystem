@@ -24,7 +24,7 @@ namespace yayu.UI
         }
         public static IDisposable ConnectText(ITextUIAccessible text_domainSide, IText text_uiSide)
         {
-            var d1 = Observable.EveryValueChanged(text_domainSide, _ => _.Text()).Subscribe(_ => text_uiSide.text = _);
+            var d1 = Observable.EveryValueChanged(text_domainSide, _ => _.Txt()).Subscribe(_ => text_uiSide.text = _);
             return d1;
         }
         public static IDisposable ConnectPanel(IPanelUIAccessible panel_domainSide, IPanel panel_uiSIde)
@@ -38,36 +38,39 @@ namespace yayu.UI
             return d1;
         }
 
-        public static IDisposable Connect(IUIElement element, UIElementContainer container)
+        public static IDisposable Connect(IUIElement element, UIElementContainer container) => Connect(element.Path(), element, container);
+        //public static IDisposable ConnectWithParentId(string parentId, IUIElement element, UIElementContainer container) => Connect(parentId+"/"+element.Path(), element, container);
+
+        public static IDisposable Connect(string path, IUIElement element, UIElementContainer container)
         {
             switch (element)
             {
-                case IButton button:  
-                    var dButton = container.GetElement<UIButton>(element.Path());
+                case IButton button:
+                    var dButton = container.GetElement<Button>(path);
                     if (dButton != null) return ConnectButton(dButton, button);
                     YDebugger.LogError("Nullった");
                     break;
                 case IText text:
-                    var dText = container.GetElement<UIText>(element.Path());
+                    var dText = container.GetElement<Text>(path);
                     if (dText != null) return ConnectText(dText, text);
                     YDebugger.LogError("Nullった");
                     break;
                 case IToggleStateApplier toggle:
-                    var dToggle = container.GetElement<UIToggle>(element.Path());
+                    var dToggle = container.GetElement<UIToggle>(path);
                     if (dToggle != null) return ConnectToggle(dToggle, toggle);
                     YDebugger.LogError("Nullった");
                     break;
                 case IPanel panel:
-                    var dPanel = container.GetElement<UIPanel>(element.Path());
+                    var dPanel = container.GetElement<Panel>(path);
                     if (dPanel != null) return ConnectPanel(dPanel, panel);
                     YDebugger.LogError("Nullった");
                     break;
                 case IGauge gauge:
-                    var dGauge = container.GetElement<UIGauge>(element.Path());
+                    var dGauge = container.GetElement<Gauge>(path);
                     if (dGauge != null) return ConnectGauge(dGauge, gauge);
                     YDebugger.LogError("Nullった");
                     break;
-                default: 
+                default:
                     break;
             }
             return Disposable.Empty;

@@ -35,15 +35,15 @@ namespace yayu.UI
     /// PureなButtonクラス
     /// IButtonUIAccessを開発環境依存のIButtonに渡す
     /// </summary>
-    public class UIButton : UIElement, IButton, IButtonUIAccessible
+    public class Button : UIElement, IButton, IButtonUIAccessible
     {
         // constructor
-        public UIButton(string id) : base(id) { }
+        public Button(string id) : base(id) { }
 
         //
         CustomEvent onClick = new(), onEnter = new(), onExit = new();
 
-        public bool interactable { get; set; }
+        public bool interactable { get; set; } = true;
 
         public void AddListener_Click(Action action) => onClick.AddListener(action);
         public void AddListener_Enter(Action action) => onEnter.AddListener(action);

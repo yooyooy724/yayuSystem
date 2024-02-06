@@ -5,12 +5,6 @@ namespace yayu.StateMachine
 {
     public class UnityPanel_Simple : UIPanelMono
     {
-        public enum InitialAction
-        {
-            Show,
-            Hide,
-            None
-        }
         public override bool isOn
         {
             get => gameObject.activeSelf;
@@ -21,23 +15,6 @@ namespace yayu.StateMachine
                 else Hide();
             }
         }
-        [SerializeField] InitialAction initialAction = InitialAction.None;
-
-        private void Awake()
-        {
-            switch (initialAction)
-            {
-                case InitialAction.Show:
-                    Show();
-                    break;
-                case InitialAction.Hide:
-                    Hide();
-                    break;
-                case InitialAction.None:
-                    break;
-            }
-        }
-
 
         public override void Show()
         {

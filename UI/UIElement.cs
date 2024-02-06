@@ -4,7 +4,7 @@ namespace yayu.UI
     {
         string id { get; }
         string parentId { set; get; }
-        public string Path() => parentId + "_" + id;
+        public string Path() => parentId != default ? parentId + "/" + id : id;
         void SetActive(bool isActive);
     }
     internal interface IUIElementUIAccessible

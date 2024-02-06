@@ -7,49 +7,43 @@ namespace yayu.UI
     /// <summary>
     /// 不要かもしれない。Initを加えないと意味がない。これができるとだいぶ良い
     /// </summary>
-    public interface IUIUnit
+    public interface IUnits
     {
-        void Register(string unitID, UIElementContainer container);
+        //void SetUnit(List<T> units);
     }
 
-    public class ButtonUnit : IUIUnit
+    public interface IUnitsAccessible
     {
-        public UIButton button = new UIButton("button");
-        public UIText label = new UIText("label");
-
-        public void Init(Action onClick, string label)
-        {
-            button.AddListener_Click(onClick);
-            this.label.text = label;
-        }
-
-        public void Register(string unitID, UIElementContainer container)
-        {
-            button.parentId = unitID;
-            label.parentId = unitID;
-            container.Register(button, label);
-        }
+        Type UnitType { get; }
+        int Count { get; } 
     }
 
-    public class TestUI
+    public class UIUnits: UIElement, IUnits, IUnitsAccessible
     {
-        readonly UIElementContainer container;
-        public TestUI(UIElementContainer container)
+        public UIUnits(Func<int> unitsCount, string id) : base(id) 
         {
-            this.container = container;
+            //this.units = units;
+            this.unitsCount = unitsCount;
         }
+        //ICollection<object> units;
+        Func<int> unitsCount;
+        Type unitType;
+   
+        public Type UnitType => unitType;
+        public int Count => unitsCount();
 
-        ButtonUnit[] buttonUnits;
+    }
 
-        void Init(params (Action onClick, string label)[] infos)
+    public class UIUnitsCreator
+    {
+        public static void Create<T>(string unitId, Func<int, string, T> createUnitByIndexAndId, int length) where T : class
         {
-            buttonUnits = new ButtonUnit[infos.Length];
-            for (int i = 0; i < infos.Length; i++)
+            T[] values = new T[length];
+            for (int i = 0; i < length; i++)
             {
-                buttonUnits[i] = new ButtonUnit();
-                buttonUnits[i].Init(infos[i].onClick, infos[i].label);
-                buttonUnits[i].Register($"test_ui_{i}", container);
+                values[i] = createUnitByIndexAndId(i, unitId + "_" + i);
             }
+            PureUI.Units(() => values.Length, unitId);
         }
     }
 }
