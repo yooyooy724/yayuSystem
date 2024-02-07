@@ -1,7 +1,7 @@
 using System;
 using yayu.Event;
-
-namespace yayu.UI
+    
+    namespace yayu.UI
 {
     public interface IToggle
     {
@@ -23,9 +23,9 @@ namespace yayu.UI
 
     }
 
-    public class UIToggle : UIElement, IToggle, IToggleUIAccessible
+    public class Toggle : UIElement, IToggle, IToggleUIAccessible
     {
-        public UIToggle(string id): base(id) { }
+        public Toggle(string id): base(id) { }
 
         bool _isOn;
         public bool isOn 

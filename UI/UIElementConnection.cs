@@ -56,7 +56,7 @@ namespace yayu.UI
                     YDebugger.LogError("Nullった");
                     break;
                 case IToggleStateApplier toggle:
-                    var dToggle = container.GetElement<UIToggle>(path);
+                    var dToggle = container.GetElement<Toggle>(path);
                     if (dToggle != null) return ConnectToggle(dToggle, toggle);
                     YDebugger.LogError("Nullった");
                     break;

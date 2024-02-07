@@ -13,7 +13,7 @@ namespace yayu.UI
     public interface PureUIFactory
     {
         Button Button(string id);
-        UIToggle Toggle(string id);
+        Toggle Toggle(string id);
         Panel Panel(bool initialState, string id);
         Gauge Gauge(string id);
         Text Text(string id);
@@ -28,9 +28,9 @@ namespace yayu.UI
             return button;
         }
 
-        public static UIToggle Toggle(string id)
+        public static Toggle Toggle(string id)
         {
-            var toggle = new UIToggle(id);
+            var toggle = new Toggle(id);
             UIElementContainerAccess.defaultContainer.Register(toggle);
             return toggle;
         }
@@ -78,7 +78,7 @@ namespace yayu.UI
             return _id;
         }
         public Button Button(string id) => PureUI.Button(ID(id));
-        public UIToggle Toggle(string id) => PureUI.Toggle(ID(id));
+        public Toggle Toggle(string id) => PureUI.Toggle(ID(id));
         public Panel Panel(bool initialState, string id) => PureUI.Panel(initialState, ID(id));
         public Gauge Gauge(string id) => PureUI.Gauge(ID(id));
         public Text Text(string id) => PureUI.Text(ID(id));

@@ -43,7 +43,25 @@ namespace yayu.UI
         //
         CustomEvent onClick = new(), onEnter = new(), onExit = new();
 
-        public bool interactable { get; set; } = true;
+        bool _interactable = true;
+        Func<bool> interactableFunc;
+        public bool interactable
+        {
+            get
+            {
+                if (interactableFunc == null) return _interactable;
+                return interactableFunc();
+            }
+            set
+            {
+                if (interactableFunc != null) YDebugger.LogWarning("already sed func");
+                _interactable = value;
+            }
+        } 
+        public void SetInteractableFunc(Func<bool> func)
+        {
+            interactableFunc = func;
+        }
 
         public void AddListener_Click(Action action) => onClick.AddListener(action);
         public void AddListener_Enter(Action action) => onEnter.AddListener(action);

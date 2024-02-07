@@ -1,4 +1,6 @@
 
+using Doozy.Editor.UIManager.Drawers;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,10 +21,23 @@ namespace yayu.UI
         public Gauge(string id) : base(id) { }
 
         float _rate;
+        Func<float> _rateFunc;
         public float rate 
-        { 
-            get => _rate; 
-            set => _rate = Mathf.Clamp01(value);
+        {
+            get
+            {
+                if (_rateFunc == null) return _rate;
+                return _rateFunc();
+            }
+            set
+            {
+                if (_rateFunc != null) YDebugger.LogWarning("already sed func");
+                _rate = Mathf.Clamp01(value);
+            }
+        }
+        public void SetRateFunc(Func<float> rateFunc)
+        {
+            _rateFunc = rateFunc;
         }
         public float Rate() => rate;
     }

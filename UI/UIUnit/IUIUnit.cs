@@ -32,10 +32,6 @@ namespace yayu.UI
         public Type UnitType => unitType;
         public int Count => unitsCount();
 
-    }
-
-    public class UIUnitsCreator
-    {
         public static void Create<T>(string unitId, Func<int, string, T> createUnitByIndexAndId, int length) where T : class
         {
             T[] values = new T[length];
