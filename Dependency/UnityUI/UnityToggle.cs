@@ -7,11 +7,12 @@ namespace yayu.UI
     public class UnityToggle : UIToggleMono
     {
         [SerializeField] UIButtonMono button;
-        [SerializeField] CanvasGroup canvasGroup;
+        [SerializeField] GameObject[] onObjects, offObjects;
 
         public override void OnValueChanged(bool inOn)
         {
-            canvasGroup.alpha = inOn ? 1 : 0;
+            onObjects.ForEach(o => o.SetActive(inOn));
+            offObjects.ForEach(o => o.SetActive(!inOn));
         }
         public override void AddListener_ForChangeValue(Action action)
         {

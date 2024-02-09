@@ -7,17 +7,29 @@ namespace yayu.UI
     public class UIUnitMono : MonoBehaviour
     {
         UIElementContainer container = UIElementContainerAccess.defaultContainer;
+        [SerializeField] string unitId;
+        public string UnitsId => unitId;
         [SerializeField] UIElementMono[] elements;
+        [SerializeField] UIUnitMono[] units;
 
         IDisposable disposable;
 
-        public void Init(string unitId)
+        public void Init() => Init(unitId);
+        public void InitWithIndex(int index) => Init(unitId + "_" + index); // Add this line
+        public void InitWithParentId(string parentId) => Init(parentId + "/" + unitId); // Add this line
+        public void InitWithParentIdAndIndex(string parentId, int index) => Init(parentId + "/" + unitId + "_" + index); // Add this line
+
+        void Init(string unitId)
         {
             var d = Disposable.CreateBuilder();
             foreach (var element in elements)
             {
                 element.parentId = unitId;
                 d.Add(UIElementConnection.Connect(element, container));
+            }
+            foreach (var unit in units)
+            {
+                unit.InitWithParentId(unitId);
             }
             disposable = d.Build();
         }
