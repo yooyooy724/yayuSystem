@@ -16,7 +16,10 @@ namespace yayu.UI
         [SerializeField] string parentId;
         private void Start()
         {
-            UIUnits units = container.GetElement<UIUnits>(prefab.UnitsId);
+            UIUnits units;
+            if (parentId != default) units = container.GetElement<UIUnits>(parentId +"/"+prefab.UnitsId);
+            else units = container.GetElement<UIUnits>(prefab.UnitsId);
+
             for (int i = 0; i < units.Count; i++)
             {
                 var unit = Instantiate(prefab, parent, false);

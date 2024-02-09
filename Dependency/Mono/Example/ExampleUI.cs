@@ -137,6 +137,7 @@ public static class ExampleLabeledButtonUnits
     {
         PureUI.Units(
             id,
+            "unit",
             (i, txt)
                 => new ExampleLabeledButtonUnit(txt, infos[i].isUnlocked, infos[i].onClicked, infos[i].label),
             infos.Length);

@@ -63,14 +63,14 @@ namespace yayu.UI
             return _units;
         }
 
-        public static UIUnits Units<T>(string unitId, Func<int, string, T> createUnitByIndexAndId, int length) where T : class
+        public static UIUnits Units<T>(string parentId, string unitId, Func<int, string, T> createUnitByIndexAndParentId, int length) where T : class
         {
             T[] values = new T[length];
             for (int i = 0; i < length; i++)
             {
-                values[i] = createUnitByIndexAndId(i, unitId + "_" + i);
+                values[i] = createUnitByIndexAndParentId(i, parentId);
             }
-            return RegisterUnits(() => values.Length, unitId);
+            return RegisterUnits(() => values.Length, parentId + "/" + unitId);
         }
     }
 
@@ -84,7 +84,6 @@ namespace yayu.UI
         public string ID(string id)
         {
             var _id = unitId + "/" + id;
-            YDebugger.Log("uf   " + _id);
             return _id;
         }
         public Button Button(string id) => PureUI.Button(ID(id));

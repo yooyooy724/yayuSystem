@@ -30,10 +30,10 @@ using yayu.Event;
         bool _isOn;
         public bool isOn 
         { 
-            get => isOn;
+            get => _isOn;
             set 
             {
-                if(_isOn != value) onValueChanged?.Invoke(isOn);
+                if(_isOn != value) onValueChanged?.Invoke(_isOn);
                 _isOn = value;
             }
         }

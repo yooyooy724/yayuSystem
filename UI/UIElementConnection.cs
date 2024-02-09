@@ -43,6 +43,7 @@ namespace yayu.UI
 
         public static IDisposable Connect(string path, IUIElement element, UIElementContainer container)
         {
+            YDebugger.Log("Connect " + path);
             switch (element)
             {
                 case IButton button:

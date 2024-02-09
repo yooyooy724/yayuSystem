@@ -21,15 +21,17 @@ namespace yayu.UI
 
         void Init(string unitId)
         {
+            Debug.Log("Init " + unitId);
             var d = Disposable.CreateBuilder();
             foreach (var element in elements)
             {
+                if (element == null) continue;
                 element.parentId = unitId;
                 d.Add(UIElementConnection.Connect(element, container));
             }
             foreach (var unit in units)
             {
-                unit.InitWithParentId(unitId);
+                unit?.InitWithParentId(unitId);
             }
             disposable = d.Build();
         }
