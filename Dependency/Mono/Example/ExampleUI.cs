@@ -135,7 +135,7 @@ public static class ExampleLabeledButtonUnits
 {
     public static void Create(string id, ExampleLabeledButtonUnit.RequiredInfo[] infos)
     {
-        UIUnits.Create(
+        PureUI.Units(
             id,
             (i, txt)
                 => new ExampleLabeledButtonUnit(txt, infos[i].isUnlocked, infos[i].onClicked, infos[i].label),

@@ -56,11 +56,21 @@ namespace yayu.UI
             return text;
         }
 
-        public static UIUnits Units(Func<int> unitsCount, string id)
+        static UIUnits RegisterUnits(Func<int> unitsCount, string id)
         {
             var _units = new UIUnits(unitsCount, id);
             UIElementContainerAccess.defaultContainer.Register(_units);
             return _units;
+        }
+
+        public static UIUnits Units<T>(string unitId, Func<int, string, T> createUnitByIndexAndId, int length) where T : class
+        {
+            T[] values = new T[length];
+            for (int i = 0; i < length; i++)
+            {
+                values[i] = createUnitByIndexAndId(i, unitId + "_" + i);
+            }
+            return RegisterUnits(() => values.Length, unitId);
         }
     }
 

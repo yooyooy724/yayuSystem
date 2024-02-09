@@ -31,15 +31,5 @@ namespace yayu.UI
    
         public Type UnitType => unitType;
         public int Count => unitsCount();
-
-        public static void Create<T>(string unitId, Func<int, string, T> createUnitByIndexAndId, int length) where T : class
-        {
-            T[] values = new T[length];
-            for (int i = 0; i < length; i++)
-            {
-                values[i] = createUnitByIndexAndId(i, unitId + "_" + i);
-            }
-            PureUI.Units(() => values.Length, unitId);
-        }
     }
 }
