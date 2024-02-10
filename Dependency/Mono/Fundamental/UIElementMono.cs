@@ -7,16 +7,7 @@ namespace yayu.UI
 {
     public class UIElementMono : MonoBehaviour, IUIElement
     {
-        [SerializeField] string _id;
-        public string id 
-        { 
-            get 
-            {
-                string generated = GetId(gameObject.name, this);
-                if (generated != default) _id = generated;
-                return _id;
-            }
-        }
+        public string id => GetId(gameObject.name, this);
         public string parentId { set; get; }
         public void SetActive(bool isActive) => gameObject.SetActive(isActive);
         public virtual Type UIAccessible => null;

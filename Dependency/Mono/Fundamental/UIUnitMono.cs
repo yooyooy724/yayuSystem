@@ -7,25 +7,16 @@ namespace yayu.UI
     public class UIUnitMono : MonoBehaviour
     {
         UIElementContainer container = UIElementContainerAccess.defaultContainer;
-        [SerializeField] string unitId;
-        public string UnitsId 
-        {
-            get
-            {
-                var generated = UIElementMono.GetId(gameObject.name, "(unit)");
-                if(generated != default) unitId = generated;
-                return unitId;
-            }
-        }
+        public string UnitsId => UIElementMono.GetId(gameObject.name, "(unit)");
         [SerializeField] UIElementMono[] elements;
         [SerializeField] UIUnitMono[] units;
 
         IDisposable disposable;
 
-        public void Init() => Init(unitId);
-        public void InitWithIndex(int index) => Init(unitId + "_" + index); // Add this line
-        public void InitWithParentId(string parentId) => Init(parentId + "/" + unitId); // Add this line
-        public void InitWithParentIdAndIndex(string parentId, int index) => Init(parentId + "/" + unitId + "_" + index); // Add this line
+        public void Init() => Init(UnitsId);
+        public void InitWithIndex(int index) => Init(UnitsId + "_" + index); // Add this line
+        public void InitWithParentId(string parentId) => Init(parentId + "/" + UnitsId); // Add this line
+        public void InitWithParentIdAndIndex(string parentId, int index) => Init(parentId + "/" + UnitsId + "_" + index); // Add this line
 
         void Init(string unitId)
         {
