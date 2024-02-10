@@ -17,9 +17,9 @@ namespace yayu.UI
         private void Start()
         {
             UIUnits units;
-            if (parentId != default) units = container.GetElement<UIUnits>(parentId +"/"+prefab.UnitsId);
-            else units = container.GetElement<UIUnits>(prefab.UnitsId);
-
+            if (parentId != default) prefab.id.SetParentId(parentId);
+            units = container.GetElement<UIUnits>(prefab.id.Path());
+            
             for (int i = 0; i < units.Count; i++)
             {
                 var unit = Instantiate(prefab, parent, false);

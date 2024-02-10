@@ -7,16 +7,18 @@ namespace yayu.UI
 {
     public class UIElementMono : MonoBehaviour, IUIElement
     {
-        public string id => GetId(gameObject.name, this);
-        public string parentId { set; get; }
+        public string parentId { set => id.SetParentId(value); }
         public void SetActive(bool isActive) => gameObject.SetActive(isActive);
         public virtual Type UIAccessible => null;
-        private void Awake()
+        UIElementIdentify _id;
+        public UIElementIdentify id 
         {
-            var name = gameObject.name; // (button) claim_button | (panel) main_canvas
-            //_id = GetId(name, this);
+            get
+            {
+                if(_id == null) _id = new UIElementIdentify(GetId(gameObject.name, this));
+                return _id;
+            }
         }
-
 
         public static string GetId(string name, MonoBehaviour element)
         {

@@ -38,7 +38,7 @@ namespace yayu.UI
             return d1;
         }
 
-        public static IDisposable Connect(IUIElement element, UIElementContainer container) => Connect(element.Path(), element, container);
+        public static IDisposable Connect(IUIElement element, UIElementContainer container) => Connect(element.id.Path(), element, container);
         //public static IDisposable ConnectWithParentId(string parentId, IUIElement element, UIElementContainer container) => Connect(parentId+"/"+element.Path(), element, container);
 
         public static IDisposable Connect(string path, IUIElement element, UIElementContainer container)

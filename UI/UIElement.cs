@@ -2,15 +2,8 @@ namespace yayu.UI
 {
     public interface IUIElement
     {
-        string id { get; }
-        string parentId { set; get; }
-        public string Path() => parentId != default ? parentId + "/" + id : id;
-        void SetActive(bool isActive);
-    }
-
-    public interface IUIUnit
-    {
         UIElementIdentify id { get; }
+        void SetActive(bool isActive);
     }
 
     public class UIElementIdentify
@@ -35,13 +28,26 @@ namespace yayu.UI
 
     public class UIElement : IUIElement, IUIElementUIAccessible
     {
-        public string id { get; }
-        public string parentId { set; get; }
+        public UIElementIdentify id { get; }
         public UIElement(string id)
         {
-            this.id = id;
+            this.id = new UIElementIdentify(id);
         }
         public bool isActive { get; private set; }
         public void SetActive(bool isActive) => this.isActive = isActive;
+    }
+
+    public interface IUIUnit : IUIElement
+    {
+    }
+    internal interface IUIUnitUIAccessible : IUIElementUIAccessible
+    {
+    }
+
+    public abstract class UIUnit : IUIUnit, IUIUnitUIAccessible
+    {
+        public abstract UIElementIdentify id { get; }
+        public void SetActive(bool isActive) => this.isActive = isActive;
+        public bool isActive { get; private set; }
     }
 }

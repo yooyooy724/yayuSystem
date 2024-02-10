@@ -99,15 +99,15 @@ namespace yayu.UI
 
         public void Register(UIElement uIElement)
         {
-            string id = (uIElement as IUIElement).Path();
-            elementsDictionary.Add(id, uIElement);
-            YDebugger.Log("id:    "+id);
+            string path = (uIElement as IUIElement).id.Path();
+            elementsDictionary.Add(path, uIElement);
+            //YDebugger.Log("path id:    " + path);
         }
 
         public void Register(params UIElement[] uIElements)
         {
             foreach (UIElement uIElement in uIElements)
-                elementsDictionary.Add(uIElement.id, uIElement);
+                elementsDictionary.Add(uIElement.id.Path(), uIElement);
         }
 
         public UIElement GetElement(string id)

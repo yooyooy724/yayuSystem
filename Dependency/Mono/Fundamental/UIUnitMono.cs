@@ -4,33 +4,66 @@ using UnityEngine;
 
 namespace yayu.UI
 {
-    public class UIUnitMono : MonoBehaviour
+    public class UIUnitMono : MonoBehaviour, IUIUnit
     {
         UIElementContainer container = UIElementContainerAccess.defaultContainer;
-        public string UnitsId => UIElementMono.GetId(gameObject.name, "(unit)");
+        public string UnitsId
+        {
+            get
+            {
+                string name = gameObject.name;
+                name = name.Replace("(Clone)", string.Empty);
+                string id = UIElementMono.GetId(name, "(unit)");
+                return id;
+            }
+        }
+
+        UIElementIdentify _id;
+        public UIElementIdentify id
+        {
+            get
+            {
+                if (_id == null) _id = new UIElementIdentify(UnitsId);
+                return _id;
+            }
+        }
+
         [SerializeField] UIElementMono[] elements;
         [SerializeField] UIUnitMono[] units;
 
         IDisposable disposable;
 
-        public void Init() => Init(UnitsId);
-        public void InitWithIndex(int index) => Init(UnitsId + "_" + index); // Add this line
-        public void InitWithParentId(string parentId) => Init(parentId + "/" + UnitsId); // Add this line
-        public void InitWithParentIdAndIndex(string parentId, int index) => Init(parentId + "/" + UnitsId + "_" + index); // Add this line
+        public void Init() => Init(id.Path());
+        public void InitWithIndex(int index)
+        {
+            id.SetIndex(index);
+            Init();
+        }
+        public void InitWithParentId(string parentId)
+        {
+            id.SetParentId(parentId);
+            Init();
+        }
+        public void InitWithParentIdAndIndex(string parentId, int index)
+        {
+            id.SetIndex(index);
+            id.SetParentId(parentId);
+            Init();
+        }
 
-        void Init(string unitId)
+        void Init(string path)
         {
             //Debug.Log("Init " + unitId);
             var d = Disposable.CreateBuilder();
             foreach (var element in elements)
             {
                 if (element == null) continue;
-                element.parentId = unitId;
+                element.parentId = path;
                 d.Add(UIElementConnection.Connect(element, container));
             }
             foreach (var unit in units)
             {
-                unit?.InitWithParentId(unitId);
+                unit?.InitWithParentId(path);
             }
             disposable = d.Build();
         }
@@ -38,6 +71,11 @@ namespace yayu.UI
         private void OnDestroy()
         {
             disposable?.Dispose();
+        }
+
+        public void SetActive(bool isActive)
+        {
+            gameObject.SetActive(isActive);
         }
     }
 }
