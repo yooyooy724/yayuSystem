@@ -8,7 +8,15 @@ namespace yayu.UI
     {
         UIElementContainer container = UIElementContainerAccess.defaultContainer;
         [SerializeField] string unitId;
-        public string UnitsId => unitId;
+        public string UnitsId 
+        {
+            get
+            {
+                var generated = UIElementMono.GetId(gameObject.name, "(unit)");
+                if(generated != default) unitId = generated;
+                return unitId;
+            }
+        }
         [SerializeField] UIElementMono[] elements;
         [SerializeField] UIUnitMono[] units;
 
@@ -21,7 +29,7 @@ namespace yayu.UI
 
         void Init(string unitId)
         {
-            Debug.Log("Init " + unitId);
+            //Debug.Log("Init " + unitId);
             var d = Disposable.CreateBuilder();
             foreach (var element in elements)
             {
