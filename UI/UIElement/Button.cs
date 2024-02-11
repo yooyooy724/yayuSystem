@@ -23,7 +23,7 @@ namespace yayu.UI
     /// 相対的にUI側に公開
     /// OnClickなどのTriggerとIsInteractableなどのStateを持つ
     /// </summary>
-    internal interface IButtonUIAccessible
+    public interface IButtonUIAccessible
     {
         void OnClick();
         void OnEnter();

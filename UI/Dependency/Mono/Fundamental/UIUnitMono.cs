@@ -18,12 +18,12 @@ namespace yayu.UI
             }
         }
 
-        UIElementIdentify _id;
-        public UIElementIdentify id
+        UIIdentify _id;
+        public UIIdentify id
         {
             get
             {
-                if (_id == null) _id = new UIElementIdentify(UnitsId);
+                if (_id == null) _id = new UIIdentify(UnitsId);
                 return _id;
             }
         }

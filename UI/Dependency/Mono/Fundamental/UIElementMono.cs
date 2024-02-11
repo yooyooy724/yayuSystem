@@ -10,12 +10,12 @@ namespace yayu.UI
         public string parentId { set => id.SetParentId(value); }
         public void SetActive(bool isActive) => gameObject.SetActive(isActive);
         public virtual Type UIAccessible => null;
-        UIElementIdentify _id;
-        public UIElementIdentify id 
+        UIIdentify _id;
+        public UIIdentify id 
         {
             get
             {
-                if(_id == null) _id = new UIElementIdentify(GetId(gameObject.name, this));
+                if(_id == null) _id = new UIIdentify(GetId(gameObject.name, this));
                 return _id;
             }
         }
@@ -62,7 +62,7 @@ namespace yayu.UI
                     return "(toggle)";
                 case IGauge _:
                     return "(gauge)";
-                case IUnits _:
+                case IUIUnits _:
                     return "(units)";
                 default:
                     return string.Empty; // 既知の型ではない場合は空文字を返す

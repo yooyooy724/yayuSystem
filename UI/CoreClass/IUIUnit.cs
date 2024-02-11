@@ -1,16 +1,21 @@
 using System;
-using System.Collections.Generic;
-using System.Xml.Linq;
-using yayu.Event;
 
 namespace yayu.UI
 {
+    public interface IUIUnit : IUIIdentify
+    {
+    }
+
+    public abstract class UIUnit : IUIUnit
+    {
+        public abstract UIIdentify id { get; }
+    }
+
     /// <summary>
     /// 不要かもしれない。Initを加えないと意味がない。これができるとだいぶ良い
     /// </summary>
-    public interface IUnits
+    public interface IUIUnits
     {
-        //void SetUnit(List<T> units);
     }
 
     public interface IUnitsAccessible
@@ -19,7 +24,7 @@ namespace yayu.UI
         int Count { get; } 
     }
 
-    public class UIUnits: UIElement, IUnits, IUnitsAccessible
+    public class UIUnits: UIElement, IUIUnits, IUnitsAccessible
     {
         public UIUnits(Func<int> unitsCount, string id) : base(id) 
         {
