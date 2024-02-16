@@ -65,11 +65,16 @@ namespace yayu.UI
 
         public static UIUnits Units<T>(string parentId, string unitId, Func<int, string, T> createUnitByIndexAndParentId, int length) where T : class
         {
+            return Units<T>(parentId, unitId, createUnitByIndexAndParentId, length, out _);
+        }
+        public static UIUnits Units<T>(string parentId, string unitId, Func<int, string, T> createUnitByIndexAndParentId, int length, out T[] units) where T : class
+        {
             T[] values = new T[length];
             for (int i = 0; i < length; i++)
             {
                 values[i] = createUnitByIndexAndParentId(i, parentId);
             }
+            units = values;
             return RegisterUnits(() => values.Length, parentId + "/" + unitId);
         }
     }

@@ -8,33 +8,38 @@ namespace yayu.UI
     /// </summary>
     internal class UIElementConnection
     {
-        public static IDisposable ConnectButton(IButtonUIAccessible button_domainSide, IButton button_UISIde)
+        public static IDisposable ConnectUIElement(IUIElementUIAccessible serviceSide, IUIElement clientSide)
         {
-            button_UISIde.AddListener_Click(button_domainSide.OnClick);
-            button_UISIde.AddListener_Enter(button_domainSide.OnEnter);
-            button_UISIde.AddListener_Exit(button_domainSide.OnExit);
-            var d1 = Observable.EveryValueChanged(button_domainSide, _ => _.IsInteractable()).Subscribe(_ => button_UISIde.interactable = _);
+            var d1 = Observable.EveryValueChanged(serviceSide, _ => _.isActive).Subscribe(_ => clientSide.SetActive(_));
             return d1;
         }
-        public static IDisposable ConnectToggle(IToggleUIAccessible toggle_domainSide, IToggleStateApplier toggle_UISIde)
+        public static IDisposable ConnectButton(IButtonUIAccessible button_serviceSide, IButton button_clientSide)
         {
-            toggle_UISIde.AddListener_ForChangeValue(toggle_domainSide.ChangeValue);
-            var d1 = Observable.EveryValueChanged(toggle_domainSide, _ => _.IsOn()).Subscribe(_ => toggle_UISIde.OnValueChanged(_));
+            button_clientSide.AddListener_Click(button_serviceSide.OnClick);
+            button_clientSide.AddListener_Enter(button_serviceSide.OnEnter);
+            button_clientSide.AddListener_Exit(button_serviceSide.OnExit);
+            var d1 = Observable.EveryValueChanged(button_serviceSide, _ => _.IsInteractable()).Subscribe(_ => button_clientSide.interactable = _);
             return d1;
         }
-        public static IDisposable ConnectText(ITextUIAccessible text_domainSide, IText text_uiSide)
+        public static IDisposable ConnectToggle(IToggleUIAccessible toggle_serviceSide, IToggleStateApplier toggle_clientSide)
         {
-            var d1 = Observable.EveryValueChanged(text_domainSide, _ => _.Txt()).Subscribe(_ => text_uiSide.text = _);
+            toggle_clientSide.AddListener_ForChangeValue(toggle_serviceSide.ChangeValue);
+            var d1 = Observable.EveryValueChanged(toggle_serviceSide, _ => _.IsOn()).Subscribe(_ => toggle_clientSide.OnValueChanged(_));
             return d1;
         }
-        public static IDisposable ConnectPanel(IPanelUIAccessible panel_domainSide, IPanel panel_uiSIde)
+        public static IDisposable ConnectText(ITextUIAccessible text_serviceSide, IText text_clientSide)
         {
-            var d1 = Observable.EveryValueChanged(panel_domainSide, _ => _.IsOn()).Subscribe(_ => panel_uiSIde.isOn = _);
+            var d1 = Observable.EveryValueChanged(text_serviceSide, _ => _.Txt()).Subscribe(_ => text_clientSide.text = _);
             return d1;
         }
-        public static IDisposable ConnectGauge(IGaugeUIAccess gauge_domainSide, IGauge gauge_uiSIde)
+        public static IDisposable ConnectPanel(IPanelUIAccessible panel_serviceSide, IPanel panel_clientSide)
         {
-            var d1 = Observable.EveryValueChanged(gauge_domainSide, _ => _.Rate()).Subscribe(_ => gauge_uiSIde.rate = _);
+            var d1 = Observable.EveryValueChanged(panel_serviceSide, _ => _.IsOn()).Subscribe(_ => panel_clientSide.isOn = _);
+            return d1;
+        }
+        public static IDisposable ConnectGauge(IGaugeUIAccess gauge_serviceSide, IGauge gauge_clientSide)
+        {
+            var d1 = Observable.EveryValueChanged(gauge_serviceSide, _ => _.Rate()).Subscribe(_ => gauge_clientSide.rate = _);
             return d1;
         }
 
@@ -43,38 +48,39 @@ namespace yayu.UI
 
         public static IDisposable Connect(string path, IUIElement element, UIElementContainer container)
         {
-            YDebugger.Log("Connect " + path);
+            var s_element = container.GetElement(path);
+            if (s_element == null) { YDebugger.Log("Cannot Get Element"); return Disposable.Empty; }
+            IDisposable d1 = ConnectUIElement(s_element, element);
+            IDisposable d2 = null;
+            //YDebugger.Log("Connect " + path);
             switch (element)
             {
                 case IButton button:
-                    var dButton = container.GetElement<Button>(path);
-                    if (dButton != null) return ConnectButton(dButton, button);
-                    YDebugger.LogError("Nullった");
+                    if (s_element is Button) d2 = ConnectButton(s_element as Button, button);
+                    else YDebugger.LogError($"Type Not Match: {element.id.Path()} & {s_element.id.Path()}");
                     break;
                 case IText text:
-                    var dText = container.GetElement<Text>(path);
-                    if (dText != null) return ConnectText(dText, text);
-                    YDebugger.LogError("Nullった");
+                    if (s_element is Text) d2 = ConnectText(s_element as Text, text);
+                    else YDebugger.LogError($"Type Not Match: {element.id.Path()} & {s_element.id.Path()}");
                     break;
                 case IToggleStateApplier toggle:
-                    var dToggle = container.GetElement<Toggle>(path);
-                    if (dToggle != null) return ConnectToggle(dToggle, toggle);
-                    YDebugger.LogError("Nullった");
+                    if (s_element is Toggle dToggle) d2 = ConnectToggle(dToggle, toggle);
+                    else YDebugger.LogError($"Type Not Match: {element.id.Path()} & {s_element.id.Path()}");
                     break;
                 case IPanel panel:
-                    var dPanel = container.GetElement<Panel>(path);
-                    if (dPanel != null) return ConnectPanel(dPanel, panel);
-                    YDebugger.LogError("Nullった");
+                    if (s_element is Panel dPanel) d2 = ConnectPanel(dPanel, panel);
+                    else YDebugger.LogError($"Type Not Match: {element.id.Path()} & {s_element.id.Path()}");
                     break;
                 case IGauge gauge:
-                    var dGauge = container.GetElement<Gauge>(path);
-                    if (dGauge != null) return ConnectGauge(dGauge, gauge);
-                    YDebugger.LogError("Nullった");
+                    if (s_element is Gauge dGauge) d2 = ConnectGauge(dGauge, gauge);
+                    else YDebugger.LogError($"Type Not Match: {element.id.Path()} & {s_element.id.Path()}");
                     break;
                 default:
+                    YDebugger.Log($"Unsupported Element Type: {element.id.Path()} & {s_element.id.Path()}");
                     break;
             }
-            return Disposable.Empty;
+            if(d2 == null) return d1;
+            return R3.Disposable.Combine(d1, d2);
         }
     }
 }

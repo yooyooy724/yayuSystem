@@ -1,14 +1,25 @@
+using Doozy.Editor.UIManager.Drawers;
 using System;
 
 namespace yayu.UI
 {
+    /// <summary>
+    /// 今は不要
+    /// </summary>
     public interface IUIUnit : IUIIdentify
     {
     }
 
     public abstract class UIUnit : IUIUnit
     {
+        public UIUnit(string parentId, int index = -1)
+        {
+            id.SetParentId(parentId);
+            id.SetIndex(index);
+            factory = new UnitFactory(id.Path());
+        }
         public abstract UIIdentify id { get; }
+        protected UnitFactory factory { get; }
     }
 
     /// <summary>
