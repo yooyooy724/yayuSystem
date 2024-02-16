@@ -1,3 +1,4 @@
+using R3;
 using System;
 using yayu.Event;
     
@@ -49,6 +50,7 @@ using yayu.Event;
         }
 
         public bool IsOn() => isOn;
+        
         public void ChangeValue()
         {
             isOn = !isOn;
