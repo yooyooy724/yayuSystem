@@ -52,7 +52,7 @@ namespace yayu.UI
             if (s_element == null) { YDebugger.Log("Cannot Get Element"); return Disposable.Empty; }
             IDisposable d1 = ConnectUIElement(s_element, element);
             IDisposable d2 = null;
-            //YDebugger.Log("Connect " + path);
+            YDebugger.Log("CONNECT :   " + path);
             switch (element)
             {
                 case IButton button:

@@ -16,14 +16,19 @@ namespace yayu.UI
         [SerializeField] string parentId;
         private void Start()
         {
+            UIMonoControlCallBack.instance.RegisterOnInitialize(Initialize);
+        }
+
+        void Initialize()
+        {
             UIUnits units;
             if (parentId != default) prefab.id.SetParentId(parentId);
             units = container.GetElement<UIUnits>(prefab.id.Path());
-            
+
             for (int i = 0; i < units.Count; i++)
             {
                 var unit = Instantiate(prefab, parent, false);
-                if(parentId != default) unit.InitWithParentIdAndIndex(parentId, i);
+                if (parentId != default) unit.InitWithParentIdAndIndex(parentId, i);
                 else unit.InitWithIndex(i);
             }
             onCreateComplete.Invoke();

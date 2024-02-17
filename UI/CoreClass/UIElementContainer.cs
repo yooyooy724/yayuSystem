@@ -106,7 +106,7 @@ namespace yayu.UI
         {
             string path = (uIElement as IUIElement).id.Path();
             elementsDictionary.Add(path, uIElement);
-            //YDebugger.Log("path id:    " + path);
+            YDebugger.Log("REGISTER :    " + path);
         }
 
         public void Register(params UIElement[] uIElements)
