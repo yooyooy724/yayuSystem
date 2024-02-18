@@ -2,7 +2,7 @@ using UnityEngine;
 using R3;
 using System;
 
-namespace yayu.DOTS
+namespace My.DOTS
 {
     public interface ICircleDataAccessor
     {

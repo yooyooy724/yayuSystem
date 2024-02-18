@@ -4,7 +4,7 @@ using System.Linq;
 using Unity.Collections;
 using UnityEngine;
 
-namespace yayu.DOTS
+namespace My.DOTS
 {
     public interface IParticleData
     {

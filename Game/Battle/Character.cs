@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace yayu.Battle
+namespace My.Battle
 {
     public interface ICharacter
     {

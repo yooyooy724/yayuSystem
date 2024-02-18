@@ -1,7 +1,7 @@
 using System;
-using yayu.Event;
+using My.Event;
 
-namespace yayu
+namespace My
 {
     public interface ILoopTimer
     {

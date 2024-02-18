@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace yayu.DOTS
+namespace My.DOTS
 {
     public class ParticleRenderer : MonoBehaviour
     {

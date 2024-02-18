@@ -1,6 +1,6 @@
-using yayu.Event;
+using My.Event;
 
-namespace yayu.Battle
+namespace My.Battle
 {
     public class CharacterEvents
     {

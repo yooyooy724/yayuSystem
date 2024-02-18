@@ -1,6 +1,6 @@
 using System;
 
-namespace yayu.Event
+namespace My.Event
 {
     public interface IEventTrigger<T1, T2, T3, T4>
     {

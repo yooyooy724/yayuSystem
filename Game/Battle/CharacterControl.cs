@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace yayu.Battle
+namespace My.Battle
 {
     public interface IAttackBehavior
     {

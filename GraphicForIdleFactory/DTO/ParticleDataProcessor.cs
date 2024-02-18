@@ -4,7 +4,7 @@ using UnityEngine;
 using Unity.Burst;
 using System;
 
-namespace yayu.DOTS
+namespace My.DOTS
 {
     [BurstCompile]
     public struct AgeUpdateJob : IJobParallelFor

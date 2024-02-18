@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace yayu.DOTS
+namespace My.DOTS
 {
     public class ParticleManager : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-namespace yayu.Battle
+namespace My.Battle
 {
     public class DirectDamageBehavior : IAttackedDamage
     {

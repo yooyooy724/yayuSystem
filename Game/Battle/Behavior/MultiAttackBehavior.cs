@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace yayu.Battle
+namespace My.Battle
 {
     public class CompositeAttackBehavior : IAttackBehavior
     {

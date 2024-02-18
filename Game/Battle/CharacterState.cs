@@ -1,6 +1,6 @@
 using System;
 
-namespace yayu.Battle
+namespace My.Battle
 {
     /// <summary>
     /// Represents the state of a character, including health and behavioral state.

@@ -1,5 +1,5 @@
 using UnityEngine;
-using yayu.UI;
+//using My.UI;
 //namespace Yayu.Utility
 //{
     public class YDebugger
@@ -34,7 +34,7 @@ using yayu.UI;
 
         private static void _PopUp(object message)
         {
-            InstantAlert.Alert(message.ToString(), 3.0f);
+            //InstantAlert.Alert(message.ToString(), 3.0f);
         }
 
         // ---------------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ using yayu.UI;
 
         private static void _Tooltip(object message)
         {
-            InstantAlert.Alert(message.ToString(), 3.0f);
+            //InstantAlert.Alert(message.ToString(), 3.0f);
         }
 
 

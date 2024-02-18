@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace yayu
+namespace My
 {
     public class MyMath
     {
