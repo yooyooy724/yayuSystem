@@ -1,67 +1,92 @@
-//using System;
-//using UnityEngine;
-//using UnityEngine.Events;
-//using UnityEngine.EventSystems;
+using System;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-//public class UnityButton_Collider : BUTTON
-//{
-//    private EventTrigger eventTrigger;
-//    private Collider collider;
+namespace yayu.UI
+{
+    public class UnityButton_Collider : UIButtonMono
+    {
+        private EventTrigger eventTrigger;
+        //private Collider collider;
+        private Collider2D collider2D;
+        public UnityEvent onClick = new UnityEvent();
+        public UnityEvent onEnter = new UnityEvent();
+        public UnityEvent onExit = new UnityEvent();
 
-//    void Awake()
-//    {
-//        eventTrigger = gameObject.AddComponent<EventTrigger>();
-//        collider = GetComponent<Collider>();
+        void Awake()
+        {
+            eventTrigger = gameObject.AddComponent<EventTrigger>();
+            //collider = GetComponent<Collider>();
+            collider2D = GetComponent<Collider2D>();
 
-//        if (collider == null)
-//        {
-//            Debug.LogError("Collider component not found on the GameObject.");
-//        }
-//    }
+            if (collider2D == null)
+            {
+                Debug.LogError("Collider or Collider2D component not found on the GameObject.");
+            }
 
-//    public override bool interactable
-//    {
-//        get { return collider.enabled; }
-//        set { collider.enabled = value; }
-//    }
+            AddListener_Click(() => onClick.Invoke());
+            AddListener_Enter(() => onEnter.Invoke());
+            AddListener_Exit(() => onExit.Invoke());
+        }
 
-//    public override bool visible
-//    {
-//        get { return gameObject.activeSelf; }
-//        set { gameObject.SetActive(value); }
-//    }
+        public override bool interactable
+        {
+            get
+            {
+                // Collider2Dを考慮した状態取得
+                //if (collider != null) return collider.enabled;
+                if (collider2D != null) return collider2D.enabled;
+                return false;
+            }
+            set
+            {
+                // ColliderとCollider2Dの有無に応じて状態設定
+                //if (collider != null) collider.enabled = value;
+                if (collider2D != null) collider2D.enabled = value;
+            }
+        }
 
-//    private void AddEventTriggerListener(EventTriggerType type, UnityAction action)
-//    {
-//        EventTrigger.Entry entry = new EventTrigger.Entry();
-//        entry.eventID = type;
-//        entry.callback.AddListener((data) => { action(); });
-//        eventTrigger.triggers.Add(entry);
-//    }
+        public override bool visible
+        {
+            get { return gameObject.activeSelf; }
+            set { gameObject.SetActive(value); }
+        }
 
-//    public override void AddListener_onClick(Action action)
-//    {
-//        AddEventTriggerListener(EventTriggerType.PointerClick, () => action());
-//    }
+        private void AddEventTriggerListener(EventTriggerType type, UnityAction action)
+        {
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = type;
+            entry.callback.AddListener((data) => { action(); });
+            eventTrigger.triggers.Add(entry);
+        }
 
-//    public override void AddListener_onEnter(Action action)
-//    {
-//        AddEventTriggerListener(EventTriggerType.PointerEnter, () => action());
-//    }
+        public override void AddListener_Click(Action action)
+        {
+            AddEventTriggerListener(EventTriggerType.PointerClick, () => action());
+        }
 
-//    public override void AddListener_onExit(Action action)
-//    {
-//        AddEventTriggerListener(EventTriggerType.PointerExit, () => action());
-//    }
+        public override void AddListener_Enter(Action action)
+        {
+            AddEventTriggerListener(EventTriggerType.PointerEnter, () => action());
+        }
 
-//    // RemoveListenerメソッドは、必要に応じてEventTriggerのtriggersリストから適切なエントリを削除する実装が必要です。
-//    // ここでは、簡単のために具体的な実装は省略します。
+        public override void AddListener_Exit(Action action)
+        {
+            AddEventTriggerListener(EventTriggerType.PointerExit, () => action());
+        }
 
-//    public override void RemoveAllListeners()
-//    {
-//        if (eventTrigger != null)
-//        {
-//            eventTrigger.triggers.Clear();
-//        }
-//    }
-//}
+        // RemoveListenerメソッドの具体的な実装は、リスナーを効率的に管理するための仕組みを設計する必要があります。
+        public override void RemoveListener_Click(Action action) { }
+        public override void RemoveListener_Enter(Action action) { }
+        public override void RemoveListener_Exit(Action action) { }
+
+        public override void RemoveAllListeners()
+        {
+            if (eventTrigger != null)
+            {
+                eventTrigger.triggers.Clear();
+            }
+        }
+    }
+}

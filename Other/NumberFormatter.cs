@@ -260,7 +260,7 @@ public class NumberFormatter
 
             if (whole > 0)
             {
-                return $"{whole}{units[index]}{Math.Round(fraction * dividers[index - 1], decimals)}{units[index - 1]}";
+                return $"{whole}{units[index]} {Math.Round(fraction * dividers[index - 1], decimals)}{units[index - 1]}";
             }
             else
             {

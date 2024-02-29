@@ -103,6 +103,36 @@ namespace yayu.Battle
         public static readonly CharacterBehaviorState Battling = new CharacterBehaviorState(true, true);
         public static readonly CharacterBehaviorState Resting = new CharacterBehaviorState(true, false);
         public static readonly CharacterBehaviorState Dying = new CharacterBehaviorState(false, false);
+
+        #region comparable
+        // Equals メソッドのオーバーライド
+        public override bool Equals(object obj)
+        {
+            if (obj is CharacterBehaviorState other)
+            {
+                return CanAttack == other.CanAttack && CanAttack == other.CanAttack;
+            }
+            return false;
+        }
+
+        // GetHashCode メソッドのオーバーライド
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(CanRegenerate, CanAttack);
+        }
+
+        // == 演算子のオーバーロード
+        public static bool operator ==(CharacterBehaviorState left, CharacterBehaviorState right)
+        {
+            return left.Equals(right);
+        }
+
+        // != 演算子のオーバーロード
+        public static bool operator !=(CharacterBehaviorState left, CharacterBehaviorState right)
+        {
+            return !(left == right);
+        }
+        #endregion
     }
 
     public static class CharacterBehaviorStateExtension

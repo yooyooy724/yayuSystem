@@ -1,5 +1,3 @@
-using Codice.Client.BaseCommands;
-
 namespace yayu.UI
 {
     public interface IText
