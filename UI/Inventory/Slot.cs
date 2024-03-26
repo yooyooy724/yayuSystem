@@ -6,8 +6,6 @@ namespace yayu.Inventory
     public interface ISlot
     {
         IItem Item { get; set; }
-        void AddItem(IItem item);
-        void RemoveItem();
         bool isHovered { get; set; }
         bool isClicked { get; set; }
         CustomEvent<IItem> OnClick { get; }
@@ -32,16 +30,6 @@ namespace yayu.Inventory
         CustomEvent<IItem> onClick = new();
         CustomEvent<IItem> onEnter = new();
         CustomEvent<IItem> onExit = new();
-
-        public void AddItem(IItem newItem)
-        {
-            Item = newItem;
-        }
-
-        public void RemoveItem()
-        {
-            Item = null;
-        }
     }
 
     public class ConstantSlot : ISlot

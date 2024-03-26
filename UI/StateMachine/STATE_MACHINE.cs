@@ -26,6 +26,12 @@ namespace yayu.UI.StateMachine
             {
                 instance?.Dispose();
             }
+
+            // Instances‚ðNull‚É
+            for (int i = 0; i < Instances.Length; i++)
+            {
+                Instances[i] = null;
+            }
         }
     }
 }

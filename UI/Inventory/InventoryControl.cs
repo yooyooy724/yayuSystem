@@ -143,7 +143,7 @@ namespace yayu.Inventory
                 {
                     slot.isHovered = false;
                     slot.isClicked = false;
-                    slot.RemoveItem();
+                    slot.Item = null;
                 }
             }
         }

@@ -50,9 +50,9 @@ namespace yayu.UI.Inventory
             buttonComponent.AddListener_Exit(() => slot.OnExit.Invoke(slot.Item));
 
             // ボタンのイベントリスナーを設定
-            buttonComponent.AddListener_Click(() => YDebugger.Log("OnClick"));
-            buttonComponent.AddListener_Enter(() => YDebugger.Log("OnEnter"));
-            buttonComponent.AddListener_Exit(() => YDebugger.Log("OnExit"));
+            //buttonComponent.AddListener_Click(() => YDebugger.Log("OnClick"));
+            //buttonComponent.AddListener_Enter(() => YDebugger.Log("OnEnter"));
+            //buttonComponent.AddListener_Exit(() => YDebugger.Log("OnExit"));
 
         }
 

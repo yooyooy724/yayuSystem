@@ -9,6 +9,7 @@ namespace yayu.Inventory
         int Capacity { get; }
         bool AddItem(IItem item, bool pushOutIfFull = false);
         bool RemoveItem(IItem item);
+        void Clear();
         IItem FindItem(string id);
         IReadOnlyCollection<ISlot> Slots { get; }
         // 他に必要なメソッドやプロパティがあればここに追加
@@ -38,23 +39,26 @@ namespace yayu.Inventory
             {
                 slots.Add(new TSlot());
                 if(i < items.Length)
-                    slots[i].AddItem(items[i]);
+                    slots[i].Item = items[i];
             }
         }
 
         public bool AddItem(IItem item, bool pushOutIfFull = false)
         {
+            if (pushOutIfFull)
+            {
+                for (int i = slots.Count - 1; i > 0; i--)
+                {
+                    slots[i].Item = slots[i - 1].Item; // アイテムを一つずつ前にシフト
+                }
+                slots[0].Item = item; // 最初のスロットに新しいアイテムを追加
+                return true;
+            }
+
             var emptySlot = slots.FirstOrDefault(s => s.Item == null);
             if (emptySlot != null)
             {
-                emptySlot.AddItem(item);
-                return true;
-            }
-            else if (pushOutIfFull && slots.Count > 0)
-            {
-                // 最初のスロットからアイテムを押し出し
-                slots[0].RemoveItem();
-                slots[0].AddItem(item);
+                emptySlot.Item = item;
                 return true;
             }
             return false;
@@ -65,10 +69,18 @@ namespace yayu.Inventory
             var slot = slots.FirstOrDefault(s => s.Item != null && s.Item.id == item.id);
             if (slot != null)
             {
-                slot.RemoveItem();
+                slot.Item = null;
                 return true;
             }
             return false;
+        }
+
+        public void Clear()
+        {
+            foreach (var slot in slots)
+            {
+                slot.Item = null;
+            }
         }
 
         public IItem FindItem(string id)

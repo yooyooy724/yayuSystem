@@ -35,7 +35,7 @@ namespace yayu.UI
             this.textDelegate = textDelegate;
 
             if (disposable != null) disposable.Dispose();
-            disposable = Observable.EveryValueChanged(this, _ => _.textDelegate()).Subscribe(_ => textField.text = _);
+            disposable = Observable.EveryValueChanged(this, _ => _.textDelegate()).Subscribe(_ => { if (textField != null) textField.text = _; });
         }
 
         public override Color color
@@ -51,7 +51,6 @@ namespace yayu.UI
 
         private void OnDestroy()
         {
-            textDelegate = null;
             if (disposable != null) disposable.Dispose();
         }
 
